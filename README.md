@@ -1,6 +1,6 @@
-# Spiff (placeholder name)
+# DetailDash
 
-On-demand mobile car detailing marketplace prototype. Rename the product in `config/brand.ts`.
+On-demand mobile car detailing marketplace prototype, launching in Framingham & MetroWest, MA. Rename the product or change fees in `config/brand.ts`.
 
 Stack: Next.js (App Router) + TypeScript + Tailwind, Supabase (Postgres, Auth, RLS, Storage), Stripe Connect (test mode only), Vercel.
 
@@ -8,6 +8,15 @@ Stack: Next.js (App Router) + TypeScript + Tailwind, Supabase (Postgres, Auth, R
 
 - [x] Step 2: auth and roles (this commit)
 - [ ] Steps 3–9: profile onboarding, public page, booking, browse, job lifecycle, reviews, dashboards, seed data
+
+## Product decisions (from the concept doc)
+
+- Local-first launch: Framingham and MetroWest.
+- Mobile-only detailers; manual approval and a manual "verified" flag (no automated insurance or background checks).
+- Each detailer chooses **instant booking** or **approve requests**. Both take a 25% deposit; the rest is collected after the job. Platform fee is 15%.
+- **Rebook now, recurring later:** one-tap "book this detailer again". Recurring plans (saved cards, capacity holds) are deferred until rebooking is proven.
+- **No AI in the prototype.** Scheduling, pricing and payments are plain deterministic software. AI assistant/dispatch is a later phase.
+- Job statuses: requested, confirmed, en route, in progress, completed, paid out, plus declined, cancelled and disputed.
 
 ## Setup
 
