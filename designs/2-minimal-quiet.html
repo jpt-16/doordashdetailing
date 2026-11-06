@@ -1,0 +1,108 @@
+<title>DetailDash Quiet</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: split screen. A sticky tinted panel holds the pitch and CTA; the right column scrolls proof and features. Teal on sage-grey. */
+:root{--bg:#ffffff;--panel:#e9efec;--fg:#13221e;--muted:#5d6e68;--line:#d9e2de;--accent:#0f766e;--accent-d:#0b5a54;--on-accent:#fff;--soft:#dcebe7;
+ --sans:"Manrope",ui-sans-serif,system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1513;--panel:#121d1a;--fg:#e6f0ec;--muted:#8fa49d;--line:#22332e;--accent:#4fd1c0;--accent-d:#7be3d5;--on-accent:#04201c;--soft:#173028;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1513;--panel:#121d1a;--fg:#e6f0ec;--muted:#8fa49d;--line:#22332e;--accent:#4fd1c0;--accent-d:#7be3d5;--on-accent:#04201c;--soft:#173028;color-scheme:dark}
+*{box-sizing:border-box}h1,h2,h3,p{margin:0}a{color:inherit;text-decoration:none}
+body{background:var(--bg);color:var(--fg);font:400 1rem/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+.shell{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);min-height:100vh}
+@media(max-width:900px){.shell{grid-template-columns:1fr}}
+.left{background:var(--panel);padding-block:28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:clamp(16px,4vw,56px);padding-inline-start:max(16px,calc((100vw - 1240px)/2 + 16px),env(safe-area-inset-left,0px))}
+.pin{position:sticky;top:28px;display:flex;flex-direction:column;gap:clamp(28px,6vh,64px);min-height:calc(100vh - 56px);justify-content:space-between}
+@media(max-width:900px){.pin{position:static;min-height:0;gap:36px;padding-bottom:20px}}
+.logo{font-weight:800;letter-spacing:-.03em;font-size:1.1rem;display:inline-flex;align-items:center;gap:9px}
+.logo i{width:12px;height:12px;border-radius:50%;background:var(--accent)}
+h1{font-size:clamp(2.3rem,5vw,4.1rem);line-height:1.02;letter-spacing:-.045em;font-weight:700;text-wrap:balance;animation:fade .9s both}
+.lede{font-size:1.1rem;color:var(--muted);max-width:34ch;margin-top:20px;animation:fade .9s .1s both}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 28px;border-radius:999px;background:var(--accent);color:var(--on-accent);font-weight:700;font-size:1rem;border:0;cursor:pointer;font-family:inherit;transition:background .2s,transform .1s,box-shadow .2s}
+.btn:hover{background:var(--accent-d);box-shadow:0 8px 24px -10px var(--accent)}.btn:active{transform:scale(.97)}
+.btn:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.cta-row{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center;margin-top:30px;animation:fade .9s .2s both}
+.link{font-weight:600;border-bottom:1.5px solid var(--accent);padding-bottom:2px}
+.live{display:flex;align-items:center;gap:10px;font:500 .78rem var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2.4s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 7px transparent;opacity:.5}0%,100%{box-shadow:0 0 0 0 var(--accent)}}
+.mini{background:var(--bg);border-radius:20px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;max-width:380px}
+.mini .r{display:flex;justify-content:space-between;gap:12px;font-size:.92rem}
+.mini .r span:first-child{color:var(--muted)}.mini b{font-variant-numeric:tabular-nums}
+.mini hr{border:0;border-top:1px solid var(--line);margin:0;width:100%}
+.right{padding-block:28px 0;padding-right:max(16px,env(safe-area-inset-right,0px));padding-left:clamp(16px,5vw,80px);padding-inline-end:max(16px,calc((100vw - 1240px)/2 + 16px),env(safe-area-inset-right,0px))}
+@media(max-width:900px){.right{padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}}
+.blk{padding-block:clamp(44px,7vw,92px);border-bottom:1px solid var(--line)}
+.blk:last-of-type{border:0}
+.eyebrow{font:500 .76rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+h2{font-size:clamp(1.7rem,3.2vw,2.5rem);line-height:1.1;letter-spacing:-.035em;font-weight:700;max-width:18ch;text-wrap:balance}
+.flow{list-style:none;margin:36px 0 0;padding:0;display:flex;flex-direction:column}
+.flow li{display:grid;grid-template-columns:34px 1fr;gap:18px;position:relative;padding-bottom:30px}
+.flow li::before{content:"";position:absolute;left:16px;top:34px;bottom:2px;width:1.5px;background:var(--line)}
+.flow li:last-child::before{display:none}
+.flow .d{width:34px;height:34px;border-radius:50%;background:var(--soft);color:var(--accent);display:grid;place-items:center;font:500 .8rem var(--mono)}
+.flow h3{font-size:1.1rem;font-weight:700;letter-spacing:-.015em}.flow p{color:var(--muted);margin-top:3px;max-width:44ch}
+.big{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-top:30px}
+.big b{font-size:clamp(3.2rem,8vw,5.5rem);letter-spacing:-.06em;line-height:1;font-weight:700;color:var(--accent)}
+.big span{color:var(--muted);max-width:26ch}
+.revs{display:grid;gap:14px;margin-top:30px}
+.rev{background:var(--panel);border-radius:20px;padding:22px 24px;transition:transform .25s}
+.rev:hover{transform:translateY(-3px)}
+.rev p{font-size:1.06rem;line-height:1.5;letter-spacing:-.01em}
+.rev small{display:block;margin-top:12px;font:500 .74rem var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:30px 36px;margin-top:34px}
+@media(max-width:620px){.feat{grid-template-columns:1fr}}
+.feat div{border-top:1.5px solid var(--fg);padding-top:14px}
+.feat h3{font-size:1.1rem;font-weight:700;letter-spacing:-.015em}.feat p{color:var(--muted);margin-top:6px}
+.end{padding-block:60px 70px}
+.end p.s{font:500 .74rem var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:30px}
+.sticky{display:none}
+@media(max-width:900px){.sticky{display:flex;position:sticky;bottom:0;z-index:5;background:var(--bg);border-top:1px solid var(--line);padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}.sticky .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<div class="shell">
+ <div class="left"><div class="pin">
+  <a class="logo" href="#"><i></i>DetailDash</a>
+  <div>
+   <div class="live" style="margin-bottom:22px"><i></i>Now booking in Framingham</div>
+   <h1>A clean car, without leaving home.</h1>
+   <p class="lede">Local, vetted detailers come to your driveway. You pick the time and see the full price first.</p>
+   <div class="cta-row"><a class="btn" href="#book">Book a detailer</a><a class="link" href="#how">How it works</a></div>
+  </div>
+  <div class="mini" aria-label="Example booking">
+   <div class="r"><span>Premium exterior</span><b>$85.00</b></div>
+   <div class="r"><span>Sat Nov 7, 9:00 AM</span><b>Instant</b></div><hr>
+   <div class="r"><span>Due now, 25%</span><b style="color:var(--accent)">$21.25</b></div>
+   <div class="r"><span>After the job</span><b>$63.75</b></div>
+  </div>
+ </div></div>
+
+ <main class="right">
+  <section class="blk" id="how"><p class="eyebrow">How it works</p><h2>Three taps from search to booked.</h2>
+   <ol class="flow">
+    <li><span class="d">A</span><div><h3>Find</h3><p>Enter your zip and see detailers who serve your street, with prices and open times.</p></div></li>
+    <li><span class="d">B</span><div><h3>Book</h3><p>Instant booking, or a request the detailer accepts. A 25% deposit holds your slot.</p></div></li>
+    <li><span class="d">C</span><div><h3>Relax</h3><p>Follow the status from confirmed to completed. The balance is charged after the job.</p></div></li>
+   </ol></section>
+
+  <section class="blk" id="proof"><p class="eyebrow">Reviews</p><h2>People book the same detailer again.</h2>
+   <div class="big"><b>4.9</b><span>average rating across completed jobs, with 68% of customers rebooking</span></div>
+   <div class="revs">
+    <div class="rev"><p>Showed up on time, did the Outback in the driveway. Looks new.</p><small>Dana R. &middot; Framingham</small></div>
+    <div class="rev"><p>Easy to rebook. The same detailer came back two weeks later.</p><small>Chris M. &middot; Natick</small></div>
+    <div class="rev"><p>I saw the full price and the deposit before I paid anything.</p><small>Priya S. &middot; Sudbury</small></div>
+   </div><p class="eyebrow" style="margin:22px 0 0;color:var(--muted)">Sample content for design review</p></section>
+
+  <section class="blk"><p class="eyebrow">Features</p><h2>The details that make it easy to trust.</h2>
+   <div class="feat">
+    <div><h3>Approved by a person</h3><p>No automated sign-ups. Each detailer is reviewed, then verified by hand.</p></div>
+    <div><h3>Honest scheduling</h3><p>Travel and setup are built into every slot, so no one is double booked.</p></div>
+    <div><h3>Fair payments</h3><p>A deposit now, the rest after the work. Free cancellation up to 24 hours before.</p></div>
+    <div><h3>One-tap rebook</h3><p>Same detailer, same service, same address. Recurring plans come later.</p></div>
+   </div></section>
+
+  <section class="blk end" id="book"><h2>Pick a time that works for you.</h2><div class="cta-row" style="animation:none"><a class="btn" href="#">Book a detailer</a></div><p class="s">Framingham &amp; MetroWest, MA</p></section>
+ </main>
+</div>
+<div class="sticky"><a class="btn" href="#book">Book a detailer</a></div>

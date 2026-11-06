@@ -1,0 +1,102 @@
+<title>DetailDash Full Throttle</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Archivo+Narrow:wght@500;700&display=swap">
+<style>
+/* Layout: full-bleed electric blue, one huge stacked headline, orange ticker, bento grid for features, sideways review rail. Single committed look. */
+html{overflow-x:clip}
+:root{color-scheme:light;--blue:#1b36ff;--blue-d:#0f1fb8;--ink:#070b2b;--orange:#ff6a1a;--white:#ffffff;--mist:#dfe5ff;
+ --disp:"Archivo",system-ui,sans-serif;--body:"Archivo",system-ui,sans-serif}
+*{box-sizing:border-box}h1,h2,h3,p{margin:0}a{color:inherit;text-decoration:none}
+body{background:var(--blue);color:var(--white);font:500 1.02rem/1.5 var(--body);-webkit-font-smoothing:antialiased;overflow-x:clip}
+.g{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.in{max-width:1240px;margin:0 auto}
+.disp{font-family:var(--disp);font-stretch:125%;font-weight:900;text-transform:uppercase;letter-spacing:-.03em;line-height:.88}
+nav{display:flex;justify-content:space-between;align-items:center;padding-block:20px}
+.logo{font-stretch:125%;font-weight:900;font-size:1.25rem;letter-spacing:-.03em;text-transform:uppercase}
+.logo span{color:var(--orange)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:60px;padding:0 30px;background:var(--orange);color:var(--ink);font-stretch:112%;font-weight:800;font-size:1.05rem;text-transform:uppercase;letter-spacing:.01em;border:0;cursor:pointer;font-family:inherit;border-radius:999px;transition:transform .12s,background .15s,box-shadow .2s;box-shadow:0 6px 0 var(--ink)}
+.btn:hover{background:#ff7d36;transform:translateY(-2px);box-shadow:0 8px 0 var(--ink)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--ink)}
+.btn:focus-visible,a:focus-visible{outline:3px solid var(--white);outline-offset:4px}
+.btn.sm{min-height:44px;padding:0 20px;font-size:.88rem;box-shadow:0 4px 0 var(--ink)}
+.hero{position:relative;padding-block:clamp(20px,4vw,50px) clamp(50px,8vw,100px);display:grid;grid-template-columns:minmax(0,1fr);gap:30px}
+.hero h1{font-size:clamp(3.3rem,13.5vw,12rem);animation:slam .7s cubic-bezier(.2,1.2,.3,1) both}
+.hero h1 em{font-style:normal;color:var(--orange);display:block}
+.hero h1 .o{-webkit-text-stroke:2px var(--white);color:transparent}
+@keyframes slam{from{opacity:0;transform:translateY(40px) scale(.97)}}
+.sub{display:flex;flex-wrap:wrap;gap:26px 40px;align-items:center;justify-content:space-between}
+.sub p{max-width:30ch;font-size:1.3rem;line-height:1.3;font-weight:600;font-stretch:90%}
+.sticker{position:absolute;right:0;top:4%;width:clamp(110px,17vw,200px);aspect-ratio:1;border-radius:50%;background:var(--white);color:var(--ink);display:grid;place-content:center;text-align:center;rotate:-12deg;animation:spin 14s linear infinite;box-shadow:0 8px 0 var(--ink)}
+.sticker b{font-stretch:125%;font-weight:900;font-size:clamp(1.8rem,4vw,3.3rem);line-height:.9;display:block}
+.sticker small{font-weight:800;text-transform:uppercase;font-size:.7rem;letter-spacing:.08em}
+@keyframes spin{to{rotate:348deg}}
+.tick{background:var(--orange);color:var(--ink);overflow:hidden;white-space:nowrap;border-block:3px solid var(--ink);rotate:-1.2deg;margin-inline:-4vw;transform-origin:center}
+.tick div{display:inline-flex;gap:0;animation:run 28s linear infinite;padding-block:14px}
+.tick span{font-stretch:125%;font-weight:900;text-transform:uppercase;font-size:clamp(1.1rem,2.4vw,1.6rem);padding-inline:22px;letter-spacing:-.01em}
+.tick span::after{content:"/";margin-left:44px;opacity:.5}
+@keyframes run{to{transform:translateX(-50%)}}
+section{padding-block:clamp(70px,10vw,130px)}
+h2.disp{font-size:clamp(2.4rem,7.4vw,6rem);max-width:14ch}
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:46px}
+.tile{border-radius:28px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;gap:30px;min-height:240px;transition:transform .25s cubic-bezier(.3,1.3,.5,1)}
+.tile:hover{transform:translateY(-6px) rotate(-.4deg)}
+.tile h3{font-stretch:118%;font-weight:900;text-transform:uppercase;font-size:clamp(1.3rem,2.3vw,1.9rem);line-height:.98;letter-spacing:-.02em}
+.tile p{font-size:1rem;max-width:32ch}
+.tile .n{font-stretch:125%;font-weight:900;font-size:clamp(3rem,6vw,5.2rem);line-height:.85;letter-spacing:-.05em}
+.t1{grid-column:span 3;background:var(--white);color:var(--ink)}
+.t2{grid-column:span 3;background:var(--ink);color:var(--white)}
+.t3{grid-column:span 2;background:var(--mist);color:var(--ink)}
+.t4{grid-column:span 2;background:var(--orange);color:var(--ink)}
+.t5{grid-column:span 2;background:var(--white);color:var(--ink)}
+@media(max-width:860px){.t1,.t2{grid-column:span 6}.t3,.t4,.t5{grid-column:span 6;min-height:190px}}
+.proof{background:var(--ink)}
+.rate{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 36px;margin-bottom:46px}
+.rate b{font-stretch:125%;font-weight:900;font-size:clamp(6rem,22vw,17rem);line-height:.78;letter-spacing:-.07em;color:var(--orange)}
+.rate span{max-width:20ch;font-size:1.3rem;font-weight:700;line-height:1.2;padding-bottom:10px}
+.rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:16px;margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));padding-inline:max(16px,env(safe-area-inset-left,0px));scrollbar-width:thin}
+.rev{flex:0 0 min(86vw,380px);scroll-snap-align:start;background:var(--white);color:var(--ink);border-radius:28px;padding:26px;display:flex;flex-direction:column;gap:22px;justify-content:space-between}
+.rev p{font-size:1.28rem;line-height:1.22;font-weight:700;font-stretch:92%;letter-spacing:-.015em}
+.rev small{font-weight:800;text-transform:uppercase;letter-spacing:.07em;font-size:.74rem}
+.stars{color:var(--orange);letter-spacing:3px;font-size:1.1rem}
+.cta{background:var(--orange);color:var(--ink);text-align:left}
+.cta h2{font-size:clamp(3rem,11vw,9.5rem);max-width:none}
+.cta .btn{background:var(--ink);color:var(--white);box-shadow:0 6px 0 var(--blue)}
+.cta .btn:hover{background:#12195a}
+footer{background:var(--ink);padding-block:26px;display:flex;flex-wrap:wrap;gap:12px 30px;justify-content:space-between;font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em}
+.note{opacity:.6;font-size:.78rem;margin-top:18px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<div class="g"><div class="in">
+ <nav><a class="logo" href="#">Detail<span>Dash</span></a><a class="btn sm" href="#book">Book now</a></nav>
+ <header class="hero" id="book">
+  <div class="sticker" aria-label="Prices from 50 dollars"><div><small>from</small><b>$50</b><small>per wash</small></div></div>
+  <h1 class="disp">Detail<br>it. <em>At your</em><span class="o">door.</span></h1>
+  <div class="sub"><p>Vetted mobile detailers across Framingham and MetroWest. Book in under a minute.</p><a class="btn" href="#">Find my detailer &rarr;</a></div>
+ </header>
+</div></div>
+<div class="tick" aria-hidden="true"><div><span>Express wash</span><span>Interior deep clean</span><span>Full detail</span><span>Ceramic sealant</span><span>Pet hair</span><span>Premium exterior</span><span>Express wash</span><span>Interior deep clean</span><span>Full detail</span><span>Ceramic sealant</span><span>Pet hair</span><span>Premium exterior</span></div></div>
+
+<section class="g"><div class="in">
+ <h2 class="disp">Why it beats texting around.</h2>
+ <div class="bento">
+  <div class="tile t1"><span class="n">25%</span><div><h3>Deposit now, rest later</h3><p>Pay a quarter to hold your slot. The balance is charged after the job is done.</p></div></div>
+  <div class="tile t2"><span class="n" style="color:var(--orange)">1 tap</span><div><h3>Book them again</h3><p>Same detailer, same service, same address. Recurring plans are next.</p></div></div>
+  <div class="tile t3"><h3>Verified by a person</h3><p>Every detailer is approved by hand before they take a job.</p></div>
+  <div class="tile t4"><h3>Instant or request</h3><p>Detailers choose how bookings arrive. You always see which.</p></div>
+  <div class="tile t5"><h3>No double booking</h3><p>Travel and setup time are counted into every open slot.</p></div>
+ </div>
+</div></section>
+
+<section class="g proof"><div class="in">
+ <div class="rate"><b>4.9</b><span>average rating from completed jobs</span></div>
+ <div class="rail" tabindex="0" aria-label="Reviews">
+  <figure class="rev" style="margin:0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>Showed up on time, did the Outback in the driveway. Looks new.</p><small>Dana R. / Framingham</small></figure>
+  <figure class="rev" style="margin:0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>Easy to rebook. Same detailer came back two weeks later.</p><small>Chris M. / Natick</small></figure>
+  <figure class="rev" style="margin:0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>I saw the price and the deposit before I paid a cent.</p><small>Priya S. / Sudbury</small></figure>
+  <figure class="rev" style="margin:0"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>Booked at 8, car was spotless by noon.</p><small>Tom L. / Ashland</small></figure>
+ </div>
+ <p class="note">Sample content for design review</p>
+</div></section>
+
+<section class="g cta"><div class="in"><h2 class="disp">Your car called. It wants a wash.</h2><div style="margin-top:36px"><a class="btn" href="#book">Book a detailer &rarr;</a></div></div></section>
+<footer class="g"><span>DetailDash</span><span>Framingham &amp; MetroWest, MA</span><span>support@example.com</span></footer>

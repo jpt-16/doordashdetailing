@@ -1,0 +1,119 @@
+<title>DetailDash Salon</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..600;1,300..500&family=Hanken+Grotesk:wght@300..600&display=swap">
+<style>
+/* Layout: bright platinum and graphite. Centered arch hero, then a three-column service menu, staggered reviews, a hairline feature grid. Single committed look. */
+:root{color-scheme:light;--bg:#e9ebee;--paper:#f6f7f8;--ink:#17181c;--muted:#666a73;--rule:#c9ccd2;--sap:#1d3a8a;--champ:#a8935f;--serif:"Cormorant Garamond",Georgia,serif;--sans:"Hanken Grotesk",system-ui,sans-serif}
+*{box-sizing:border-box}h1,h2,h3,p,figure{margin:0}a{color:inherit;text-decoration:none}
+body{background:var(--bg);color:var(--ink);font:300 1.02rem/1.7 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.g{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}.in{max-width:1180px;margin:0 auto}
+.k{font:500 .7rem var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--champ)}
+nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding-block:24px}
+.logo{font:500 1.7rem var(--serif);letter-spacing:.14em;text-transform:uppercase;text-align:center}
+nav .l{display:flex;gap:28px}nav .r{display:flex;justify-content:flex-end}
+nav a.t{font:400 .72rem var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .2s}nav a.t:hover{color:var(--ink)}
+@media(max-width:700px){nav{grid-template-columns:1fr auto}nav .l{display:none}nav .logo{text-align:left;font-size:1.3rem}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:56px;padding:0 38px;background:var(--ink);color:var(--paper);font:400 .76rem var(--sans);letter-spacing:.22em;text-transform:uppercase;border:0;border-radius:999px;cursor:pointer;transition:background .4s,transform .2s,box-shadow .4s}
+.btn:hover{background:var(--sap);box-shadow:0 14px 30px -14px var(--sap);transform:translateY(-2px)}
+.btn:focus-visible,a:focus-visible{outline:1px solid var(--sap);outline-offset:5px}
+.btn.line{background:transparent;color:var(--ink);border:1px solid var(--ink)}.btn.line:hover{background:var(--ink);color:var(--paper)}
+.btn.sm{min-height:42px;padding:0 24px}
+.hero{text-align:center;padding-block:clamp(30px,6vw,70px) 0;display:flex;flex-direction:column;align-items:center;gap:26px}
+h1{font:300 clamp(2.8rem,8vw,7rem)/.96 var(--serif);letter-spacing:-.025em;max-width:13ch;animation:fade 1.2s cubic-bezier(.2,.7,.2,1) both}
+h1 i{font-style:italic;color:var(--sap)}
+@keyframes fade{from{opacity:0;transform:translateY(16px)}}
+.hero p.l{max-width:42ch;color:var(--muted);font-size:1.1rem;animation:fade 1.2s .15s both}
+.hero .row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;animation:fade 1.2s .3s both}
+.arch{width:min(100%,640px);margin-top:clamp(20px,4vw,50px);aspect-ratio:4/3.1;border-radius:320px 320px 0 0;background:linear-gradient(180deg,#f9fafb 0%,#d9dce2 62%,#c4c8d0 100%);position:relative;overflow:hidden;border:1px solid var(--rule);border-bottom:0;animation:fade 1.4s .2s both}
+@media(max-width:600px){.arch{border-radius:200px 200px 0 0}}
+.arch::before{content:"";position:absolute;left:50%;top:-20%;width:70%;aspect-ratio:1;translate:-50% 0;background:radial-gradient(circle,rgba(255,255,255,.95),transparent 65%)}
+.arch svg{position:absolute;left:8%;right:8%;bottom:7%;width:84%;animation:drift 9s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateX(-1.5%)}to{transform:translateX(1.5%)}}
+.arch .sw{position:absolute;left:0;right:0;bottom:0;height:7%;background:var(--ink);opacity:.9}
+.trust{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 46px;padding-block:26px;border-block:1px solid var(--rule);margin-top:0}
+.trust span{font:400 .7rem var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+section{padding-block:clamp(70px,10vw,130px)}
+.hd{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,5fr);gap:20px 60px;align-items:end;margin-bottom:56px}
+@media(max-width:820px){.hd{grid-template-columns:1fr}}
+h2{font:300 clamp(2.2rem,5vw,4rem)/1.03 var(--serif);letter-spacing:-.02em}
+h2 i{color:var(--sap)}
+.hd p{color:var(--muted);max-width:40ch}
+.menu{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--rule);background:var(--paper)}
+@media(max-width:860px){.menu{grid-template-columns:1fr}}
+.pl{padding:40px 34px 44px;display:flex;flex-direction:column;gap:14px;position:relative;transition:background .4s}
+.pl+.pl{border-left:1px solid var(--rule)}
+@media(max-width:860px){.pl+.pl{border-left:0;border-top:1px solid var(--rule)}}
+.pl:hover{background:#fff}
+.pl.f{outline:1px solid var(--sap);outline-offset:-10px;background:#fff}
+.pl h3{font:400 2rem/1.05 var(--serif)}
+.pl .p{font:300 3.4rem/1 var(--serif);color:var(--sap);margin-block:8px 2px}.pl .p small{font:400 .72rem var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-left:6px}
+.pl ul{list-style:none;margin:0 0 16px;padding:0;color:var(--muted);display:flex;flex-direction:column;gap:6px;font-size:.96rem}
+.pl li::before{content:"\2014\00a0";color:var(--champ)}
+.pl .btn{margin-top:auto;align-self:flex-start}
+.stag{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+@media(max-width:820px){.stag{grid-template-columns:1fr}.stag figure{margin-top:0!important}}
+.stag figure{background:var(--paper);padding:34px 30px;border:1px solid var(--rule);display:flex;flex-direction:column;gap:26px;justify-content:space-between}
+.stag figure:nth-child(2){margin-top:46px}.stag figure:nth-child(3){margin-top:92px}
+.stag p{font:italic 400 1.6rem/1.25 var(--serif)}
+.score{display:flex;align-items:baseline;gap:20px;flex-wrap:wrap;margin-bottom:50px}
+.score b{font:300 clamp(4rem,10vw,7rem)/.9 var(--serif);color:var(--sap)}
+.feat{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+@media(max-width:900px){.feat{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.feat{grid-template-columns:1fr}}
+.feat div{padding:28px 26px 8px 0}
+.feat div+div{padding-left:26px;border-left:1px solid var(--rule)}
+@media(max-width:900px){.feat div+div{border-left:0;padding-left:0}.feat div:nth-child(even){padding-left:26px;border-left:1px solid var(--rule)}}
+@media(max-width:520px){.feat div:nth-child(even){padding-left:0;border-left:0}}
+.feat h3{font:400 1.45rem/1.1 var(--serif);margin-bottom:8px}.feat p{color:var(--muted);font-size:.96rem}
+.fin{background:var(--ink);color:var(--paper);text-align:center}
+.fin h2{max-width:14ch;margin:0 auto 34px;color:var(--paper)}.fin h2 i{color:#9db3f5}
+.fin .btn{background:var(--paper);color:var(--ink)}.fin .btn:hover{background:#9db3f5}
+footer{padding-block:26px 40px;display:flex;flex-wrap:wrap;gap:12px 40px;justify-content:space-between;align-items:center}
+footer span{font:400 .7rem var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<div class="g"><div class="in">
+ <nav><div class="l"><a class="t" href="#menu">Services</a><a class="t" href="#words">Reviews</a></div><a class="logo" href="#">DetailDash</a><div class="r"><a class="btn sm" href="#menu">Book</a></div></nav>
+ <header class="hero" id="book">
+  <span class="k">Mobile detailing &middot; Framingham &amp; MetroWest</span>
+  <h1>Immaculate, <i>delivered</i> to your door.</h1>
+  <p class="l">Discreet, hand-approved detailers arrive with everything they need. You choose the time and see the price before you commit.</p>
+  <div class="row"><a class="btn" href="#menu">Book a detailer</a><a class="btn line" href="#how">The details</a></div>
+  <figure class="arch" aria-hidden="true">
+   <svg viewBox="0 0 400 140"><defs><linearGradient id="pb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a5262"/><stop offset=".55" stop-color="#1e222b"/><stop offset="1" stop-color="#0f1116"/></linearGradient></defs><path d="M20 100C20 92 26 88 36 86L72 80C90 62 112 48 140 46h90c32 0 60 16 82 34l48 6c14 2 20 8 20 18v8H20z" fill="url(#pb)"/><path d="M118 78c14-16 32-23 50-23h37v23zM215 55h23c18 3 36 15 50 25h-73z" fill="#0c0e13" opacity=".85"/><path d="M30 98C100 90 200 87 380 95" stroke="#fff" stroke-width=".9" fill="none" opacity=".55"/><circle cx="95" cy="114" r="22" fill="#0c0e13"/><circle cx="95" cy="114" r="10" fill="#9aa1ae"/><circle cx="305" cy="114" r="22" fill="#0c0e13"/><circle cx="305" cy="114" r="10" fill="#9aa1ae"/></svg>
+   <span class="sw"></span>
+  </figure>
+ </header>
+ <div class="trust"><span>Approved by hand</span><span>4.9 average rating</span><span>Deposit 25%</span><span>Free cancellation 24h</span></div>
+</div></div>
+
+<section class="g" id="menu"><div class="in">
+ <div class="hd"><div><span class="k">Services</span><h2 style="margin-top:16px">Three ways to <i>arrive clean.</i></h2></div><p>Every price is shown up front. A quarter is paid to hold your time; the rest after the work.</p></div>
+ <div class="menu">
+  <div class="pl"><span class="k">Refresh</span><h3>Express wash</h3><div class="p">$50<small>45 min</small></div><ul><li>Hand wash and dry</li><li>Wheels and tires</li><li>Windows, inside and out</li></ul><a class="btn line sm" href="#">Reserve</a></div>
+  <div class="pl f"><span class="k">Most booked</span><h3>Signature</h3><div class="p">$140<small>2 hr</small></div><ul><li>Interior deep clean</li><li>Steam and leather care</li><li>Optional paint sealant</li></ul><a class="btn sm" href="#">Reserve</a></div>
+  <div class="pl"><span class="k">Complete</span><h3>Full detail</h3><div class="p">$245<small>4 hr</small></div><ul><li>Inside and out</li><li>Clay and sealant</li><li>Finished with photos</li></ul><a class="btn line sm" href="#">Reserve</a></div>
+ </div>
+</div></section>
+
+<section class="g" id="words" style="padding-top:0"><div class="in">
+ <div class="score"><b>4.9</b><div><span class="k">Average rating</span><p style="color:var(--muted);max-width:30ch">68% of customers book the same detailer again.</p></div></div>
+ <div class="stag">
+  <figure><p>Showed up on time, did the Outback in the driveway. It looks new.</p><span class="k">Dana R. &middot; Framingham</span></figure>
+  <figure><p>Easy to rebook. The same detailer came back two weeks later.</p><span class="k">Chris M. &middot; Natick</span></figure>
+  <figure><p>I saw the price and the deposit before I paid anything.</p><span class="k">Priya S. &middot; Sudbury</span></figure>
+ </div>
+ <p class="k" style="margin-top:40px;color:var(--muted)">Sample content for design review</p>
+</div></section>
+
+<section class="g" id="how" style="padding-top:0"><div class="in">
+ <div class="hd"><div><span class="k">The details</span><h2 style="margin-top:16px">Considered, <i>throughout.</i></h2></div></div>
+ <div class="feat">
+  <div><h3>Approved by hand</h3><p>Every detailer is reviewed and verified by a person.</p></div>
+  <div><h3>Instant or request</h3><p>Detailers choose how bookings arrive, and you always see which.</p></div>
+  <div><h3>Honest timing</h3><p>Travel and setup are counted, so your slot holds.</p></div>
+  <div><h3>One-tap rebook</h3><p>Same detailer, same service, same address. Recurring plans follow.</p></div>
+ </div>
+</div></section>
+
+<section class="g fin"><div class="in"><h2>Your car, <i>restored</i> this weekend.</h2><a class="btn" href="#menu">Book a detailer</a></div></section>
+<footer class="g"><span>DetailDash</span><span>Framingham &amp; MetroWest, MA</span><span>support@example.com</span></footer>

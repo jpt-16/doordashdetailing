@@ -1,0 +1,118 @@
+<title>DetailDash Sticker Shop</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@500..800&family=Work+Sans:wght@400..700&display=swap">
+<style>
+/* Layout: neo-brutalist. Sky ground, ink outlines, hard offset shadows, square corners. Hero is a before/after slider you can drag. Single committed look. */
+:root{color-scheme:light;--sky:#d7eaff;--ink:#0d1b2a;--tom:#ff4d2e;--lem:#ffe14d;--mint:#8ff0c0;--white:#fff;--disp:"Syne",system-ui,sans-serif;--body:"Work Sans",system-ui,sans-serif;--b:3px solid var(--ink);--sh:6px 6px 0 var(--ink)}
+*{box-sizing:border-box}h1,h2,h3,p,figure{margin:0}a{color:inherit;text-decoration:none}
+body{background:var(--sky);color:var(--ink);font:500 1.02rem/1.55 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden;
+ background-image:radial-gradient(var(--ink) 1px,transparent 1.4px);background-size:26px 26px;background-position:0 0}
+.g{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}.in{max-width:1180px;margin:0 auto}
+.d{font-family:var(--disp);font-weight:800;letter-spacing:-.04em;line-height:.95}
+nav{display:flex;justify-content:space-between;align-items:center;padding-block:18px}
+.logo{font:800 1.5rem var(--disp);letter-spacing:-.05em;background:var(--lem);border:var(--b);padding:4px 12px;box-shadow:4px 4px 0 var(--ink);rotate:-2deg}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 26px;background:var(--tom);color:var(--white);border:var(--b);font:700 1.05rem var(--body);cursor:pointer;box-shadow:var(--sh);transition:transform .1s,box-shadow .1s;text-transform:uppercase;letter-spacing:.02em}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+.btn:active{transform:translate(5px,5px);box-shadow:1px 1px 0 var(--ink)}
+.btn:focus-visible,a:focus-visible,input:focus-visible{outline:3px dashed var(--ink);outline-offset:4px}
+.btn.ghost{background:var(--white);color:var(--ink)}.btn.sm{min-height:44px;padding:0 18px;font-size:.88rem;box-shadow:4px 4px 0 var(--ink)}
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(26px,5vw,60px);align-items:center;padding-block:clamp(20px,5vw,60px) clamp(50px,8vw,90px)}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+h1{font-size:clamp(2.9rem,8.2vw,6.6rem);animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}
+h1 mark{background:var(--lem);padding:0 .12em;border:var(--b);display:inline-block;rotate:-1.5deg;box-shadow:5px 5px 0 var(--ink)}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(16px)}}
+.lede{font-size:1.2rem;max-width:34ch;margin:26px 0 30px;font-weight:600}
+.cta-row{display:flex;flex-wrap:wrap;gap:16px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.chips span{border:var(--b);background:var(--white);padding:5px 12px;font-weight:700;font-size:.85rem;box-shadow:3px 3px 0 var(--ink)}
+.chips span:nth-child(2){background:var(--mint)}.chips span:nth-child(3){background:var(--lem)}
+.ba{position:relative;aspect-ratio:1/1;border:var(--b);box-shadow:10px 10px 0 var(--ink);background:var(--white);overflow:hidden;user-select:none;touch-action:pan-y;rotate:1.2deg}
+.ba svg{position:absolute;inset:0;width:100%;height:100%}
+.ba .before{clip-path:inset(0 calc(100% - var(--p,50%)) 0 0)}
+.ba .handle{position:absolute;top:0;bottom:0;left:var(--p,50%);width:4px;background:var(--ink);translate:-50% 0;pointer-events:none}
+.ba .handle i{position:absolute;top:50%;left:50%;translate:-50% -50%;width:46px;height:46px;border-radius:50%;background:var(--lem);border:var(--b);display:grid;place-items:center;font:800 .9rem var(--disp);box-shadow:3px 3px 0 var(--ink)}
+.ba input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.tag{position:absolute;top:12px;border:var(--b);background:var(--white);font:800 .78rem var(--disp);padding:3px 10px;text-transform:uppercase;z-index:2}
+.ba:has(input:focus-visible){outline:3px dashed var(--ink);outline-offset:6px}
+.strip{background:var(--ink);color:var(--lem);overflow:hidden;white-space:nowrap;border-block:var(--b)}
+.strip div{display:inline-flex;animation:run 24s linear infinite;padding-block:12px}
+.strip span{font:800 1.3rem var(--disp);text-transform:uppercase;padding-inline:20px;letter-spacing:-.02em}
+.strip span::after{content:"*";margin-left:40px;color:var(--tom)}
+@keyframes run{to{transform:translateX(-50%)}}
+section{padding-block:clamp(60px,9vw,110px)}
+h2.d{font-size:clamp(2.2rem,6vw,4.4rem);max-width:15ch}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:46px}
+@media(max-width:900px){.cards{grid-template-columns:1fr}}
+.card{background:var(--white);border:var(--b);box-shadow:var(--sh);padding:26px;display:flex;flex-direction:column;gap:12px;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--ink)}
+.card:nth-child(2){background:var(--mint)}.card:nth-child(3){background:var(--lem)}
+.card h3{font:800 1.7rem var(--disp);letter-spacing:-.04em;line-height:1}
+.card b.big{font:800 3.2rem var(--disp);letter-spacing:-.06em;line-height:.9}
+.list{margin-top:26px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px 26px}
+@media(max-width:700px){.list{grid-template-columns:1fr}}
+.list div{display:flex;gap:14px;align-items:flex-start;border-bottom:var(--b);padding-bottom:14px}
+.list b{flex:none;width:30px;height:30px;background:var(--ink);color:var(--lem);display:grid;place-items:center;font-family:var(--disp)}
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:50px}
+@media(max-width:900px){.notes{grid-template-columns:1fr}}
+.note{background:var(--lem);border:var(--b);box-shadow:var(--sh);padding:24px;font:600 1.18rem/1.35 var(--body);display:flex;flex-direction:column;gap:18px;justify-content:space-between}
+.note:nth-child(1){rotate:-1.6deg}.note:nth-child(2){rotate:1.2deg;background:var(--white);margin-top:18px}.note:nth-child(3){rotate:-.8deg;background:var(--mint)}
+.note small{font:800 .8rem var(--disp);text-transform:uppercase;letter-spacing:.03em}
+.score{display:flex;flex-wrap:wrap;gap:16px 30px;align-items:center;margin-top:20px}
+.score b{font:800 clamp(3.4rem,9vw,6rem) var(--disp);letter-spacing:-.07em;line-height:.9;background:var(--tom);color:var(--white);border:var(--b);padding:0 .15em;box-shadow:var(--sh)}
+.final{background:var(--tom);border-block:var(--b);color:var(--white)}
+.final h2{color:var(--white);max-width:13ch}
+.final .btn{background:var(--lem);color:var(--ink)}
+footer{padding-block:26px;display:flex;flex-wrap:wrap;gap:10px 30px;justify-content:space-between;font-weight:700;font-size:.88rem}
+.s{font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-top:34px;opacity:.7}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<div class="g"><div class="in">
+ <nav><a class="logo" href="#">DetailDash</a><a class="btn sm" href="#book">Book</a></nav>
+ <header class="hero" id="book">
+  <div>
+   <h1 class="d">Dirty car? <mark>Gone</mark> by lunch.</h1>
+   <p class="lede">Local detailers come to your driveway. Pick a time, put down 25%, pay the rest after.</p>
+   <div class="cta-row"><a class="btn" href="#">Book a detailer</a><a class="btn ghost" href="#why">See how</a></div>
+   <div class="chips"><span>From $50</span><span>Verified pros</span><span>Rebook in 1 tap</span></div>
+  </div>
+  <figure class="ba" id="ba" aria-label="Before and after of a car wash">
+   <svg viewBox="0 0 300 300" class="after" aria-hidden="true"><rect width="300" height="300" fill="#bfe3ff"/><circle cx="240" cy="60" r="34" fill="#ffe14d" stroke="#0d1b2a" stroke-width="4"/><rect y="215" width="300" height="85" fill="#9aa9bd"/><g stroke="#0d1b2a" stroke-width="4" stroke-linejoin="round"><path d="M40 205c0-12 6-18 18-20l36-8c14-20 34-34 62-34h40c26 0 48 14 66 36l22 6c10 2 16 9 16 20v10H40z" fill="#ff4d2e"/><path d="M112 174c10-14 24-22 42-22h32v22zM198 152h20c16 3 30 12 44 22h-64z" fill="#d7eaff"/><circle cx="96" cy="215" r="26" fill="#0d1b2a"/><circle cx="244" cy="215" r="26" fill="#0d1b2a"/></g><circle cx="96" cy="215" r="10" fill="#ffe14d"/><circle cx="244" cy="215" r="10" fill="#ffe14d"/><g fill="#fff" stroke="#0d1b2a" stroke-width="3"><path d="M70 112l8 14-14-8 14-8z"/><path d="M262 120l6 11-11-6 11-6z"/><path d="M150 96l5 9-9-5 9-4z"/></g></svg>
+   <svg viewBox="0 0 300 300" class="before" aria-hidden="true"><rect width="300" height="300" fill="#8e98a6"/><rect y="215" width="300" height="85" fill="#6e7886"/><g stroke="#0d1b2a" stroke-width="4" stroke-linejoin="round"><path d="M40 205c0-12 6-18 18-20l36-8c14-20 34-34 62-34h40c26 0 48 14 66 36l22 6c10 2 16 9 16 20v10H40z" fill="#8a6a58"/><path d="M112 174c10-14 24-22 42-22h32v22zM198 152h20c16 3 30 12 44 22h-64z" fill="#6b7481"/><circle cx="96" cy="215" r="26" fill="#0d1b2a"/><circle cx="244" cy="215" r="26" fill="#0d1b2a"/></g><g fill="#4b3a30" opacity=".85"><circle cx="80" cy="190" r="9"/><circle cx="130" cy="198" r="6"/><circle cx="190" cy="186" r="11"/><circle cx="250" cy="194" r="8"/><circle cx="160" cy="170" r="5"/></g></svg>
+   <span class="tag" style="left:12px">Before</span><span class="tag" style="right:12px">After</span>
+   <div class="handle"><i>&harr;</i></div>
+   <input type="range" min="2" max="98" value="50" id="rng" aria-label="Drag to compare before and after">
+  </figure>
+ </header>
+</div></div>
+<div class="strip" aria-hidden="true"><div><span>Wash</span><span>Wax</span><span>Vacuum</span><span>Shine</span><span>Repeat</span><span>Wash</span><span>Wax</span><span>Vacuum</span><span>Shine</span><span>Repeat</span><span>Wash</span><span>Wax</span><span>Vacuum</span><span>Shine</span><span>Repeat</span><span>Wash</span><span>Wax</span><span>Vacuum</span><span>Shine</span><span>Repeat</span></div></div>
+
+<section class="g" id="why"><div class="in">
+ <h2 class="d">Pick what your car needs.</h2>
+ <div class="cards">
+  <div class="card"><h3>Express wash</h3><b class="big">$50</b><p>45 minutes. Hand wash, wheels, windows, tires.</p><a class="btn sm" style="align-self:flex-start;margin-top:8px" href="#">Book</a></div>
+  <div class="card"><h3>Interior deep clean</h3><b class="big">$140</b><p>2 hours. Vacuum, steam, leather, every crumb.</p><a class="btn sm" style="align-self:flex-start;margin-top:8px" href="#">Book</a></div>
+  <div class="card"><h3>Full detail</h3><b class="big">$245</b><p>4 hours. Inside, outside, and paint sealant.</p><a class="btn sm" style="align-self:flex-start;margin-top:8px" href="#">Book</a></div>
+ </div>
+ <div class="list">
+  <div><b>+</b><p><strong>Verified by a person.</strong> Every detailer is approved by hand.</p></div>
+  <div><b>+</b><p><strong>Instant or request.</strong> You see which before you book.</p></div>
+  <div><b>+</b><p><strong>Deposit only.</strong> 25% now, the rest after the work.</p></div>
+  <div><b>+</b><p><strong>One-tap rebook.</strong> Same pro, same spot, no forms.</p></div>
+ </div>
+</div></section>
+
+<section class="g"><div class="in">
+ <h2 class="d">Neighbors keep coming back.</h2>
+ <div class="score"><b>4.9</b><p style="max-width:24ch;font-weight:700">average rating, and 68% of customers book the same detailer again</p></div>
+ <div class="notes">
+  <figure class="note"><p>Showed up on time, did the Outback in the driveway. Looks new.</p><small>Dana R. / Framingham</small></figure>
+  <figure class="note"><p>Easy to rebook. Same detailer came back two weeks later.</p><small>Chris M. / Natick</small></figure>
+  <figure class="note"><p>I saw the price and the deposit before I paid a cent.</p><small>Priya S. / Sudbury</small></figure>
+ </div>
+ <p class="s">Sample content for design review</p>
+</div></section>
+
+<section class="g final"><div class="in"><h2 class="d">Get it clean this weekend.</h2><div style="margin-top:34px"><a class="btn" href="#book">Book a detailer</a></div></div></section>
+<footer class="g"><span>DetailDash</span><span>Framingham &amp; MetroWest, MA</span><span>support@example.com</span></footer>
+<script>var r=document.getElementById("rng"),b=document.getElementById("ba");r.addEventListener("input",function(){b.style.setProperty("--p",r.value+"%")});
+var n=0,t=setInterval(function(){n+=2;var v=50+Math.sin(n/8)*22*Math.max(0,1-n/80);r.value=v;b.style.setProperty("--p",v+"%");if(n>80)clearInterval(t)},30);r.addEventListener("pointerdown",function(){clearInterval(t)});</script>
