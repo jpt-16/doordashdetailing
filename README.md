@@ -12,7 +12,7 @@ Stack: Next.js (App Router) + TypeScript + Tailwind, Supabase (Postgres, Auth, R
 ## Setup
 
 1. `npm install`
-2. Create a free project at supabase.com (or run locally with the Supabase CLI: `supabase init && supabase start`).
+2. Create a free project at supabase.com (or run locally with the Supabase CLI). The prototype project is `doordashdetailing`.
 3. Apply the SQL in `supabase/migrations/` in order (SQL Editor, or `supabase db push` / `supabase db reset` locally).
 4. In Supabase: Authentication > Providers > Email. For quick demos turn **Confirm email** off. If left on, signup tells users to check their email, and Authentication > URL Configuration must include your site URL.
 5. `cp .env.example .env.local` and fill in the Supabase URL and anon key (Project Settings > API). Leave `SUPABASE_SERVICE_ROLE_KEY` server-side only; it is not needed yet.
