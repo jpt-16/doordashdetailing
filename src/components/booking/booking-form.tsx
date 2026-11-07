@@ -23,8 +23,8 @@ const control =
   "mt-2 block h-12 w-full rounded-btn border border-field bg-white px-3 text-base focus:border-ink focus:outline-none focus:ring-1 focus:ring-ink";
 
 export function BookingForm({
-  slug,
   name,
+  photo,
   rating,
   reviewCount,
   instant,
@@ -34,8 +34,8 @@ export function BookingForm({
   signedIn,
   depositPercent,
 }: {
-  slug: string;
   name: string;
+  photo?: string;
   rating: number;
   reviewCount: number;
   instant: boolean;
@@ -100,7 +100,12 @@ export function BookingForm({
     <div className="-mx-6 sm:mx-0">
       <div className="flex gap-4 px-6 pb-6 sm:px-0">
         <div className="h-24 w-28 flex-none overflow-hidden rounded-btn">
-          <PhotoPlaceholder name={name} />
+          {photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={photo} alt={name} className="h-full w-full object-cover" />
+          ) : (
+            <PhotoPlaceholder name={name} />
+          )}
         </div>
         <div className="min-w-0">
           <p className="text-xs text-muted">Mobile detailer</p>

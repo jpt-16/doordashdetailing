@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { format } from "date-fns";
-import { getApprovedDetailers } from "@/lib/detailers";
+import { getApprovedDetailers, getPhotoUrls } from "@/lib/detailers";
 import { fromPrice, listingFor, SERVICES, type VehicleSize } from "@/lib/sample-data";
 import { CategoryTabs } from "@/components/detailers/category-tabs";
 import { FiltersButton } from "@/components/detailers/filters-sheet";
@@ -31,6 +31,8 @@ export default async function DetailersPage({ searchParams }: { searchParams: Pr
       return p >= min && p <= max;
     })
     .sort((a, b) => listingFor(b.slug).rating - listingFor(a.slug).rating);
+
+  const photoMap = await getPhotoUrls(results.map((d) => d.id));
 
   // Carry the search through to the profile and booking pages.
   const carry = new URLSearchParams();
@@ -74,7 +76,7 @@ export default async function DetailersPage({ searchParams }: { searchParams: Pr
       {results.length > 0 ? (
         <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
           {results.map((d, i) => (
-            <DetailerCard key={d.id} detailer={d} query={query} size={size} index={i} />
+            <DetailerCard key={d.id} detailer={d} photos={photoMap[d.id]} query={query} size={size} index={i} />
           ))}
         </ul>
       ) : (

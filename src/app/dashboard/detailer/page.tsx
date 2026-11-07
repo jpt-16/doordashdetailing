@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Icon } from "@/components/ui/icons";
 import { Band, Section } from "@/components/ui/section";
 import { DetailerJobPreview } from "@/components/dashboard/sample-preview";
+import { PhotoManager } from "@/components/photos/photo-manager";
+import { photoUrl } from "@/lib/photos";
 import type { Detailer } from "@/types/db";
 
 const status = {
@@ -23,6 +25,10 @@ export default async function DetailerDashboard({ searchParams }: { searchParams
   const supabase = await createClient();
   const { data } = await supabase.from("detailers").select("*").eq("user_id", profile.id).single();
   const detailer = data as Detailer | null;
+  const { data: photoRows } = detailer
+    ? await supabase.from("detailer_photos").select("id, path").eq("detailer_id", detailer.id).order("position").order("created_at")
+    : { data: [] };
+  const photos = ((photoRows ?? []) as { id: string; path: string }[]).map((r) => ({ id: r.id, url: photoUrl(r.path) }));
   const s = status[detailer?.status ?? "pending"];
   const showSample = sample === "1" && process.env.NODE_ENV !== "production";
   const name = detailer?.business_name || profile.full_name;
@@ -72,6 +78,16 @@ export default async function DetailerDashboard({ searchParams }: { searchParams
       <div className="mt-6">
         <Band />
       </div>
+      {detailer && (
+        <>
+          <div className="px-6">
+            <Section title="Photos">
+              <PhotoManager photos={photos} />
+            </Section>
+          </div>
+          <Band />
+        </>
+      )}
       <div className="px-6">
         <Section title="Upcoming jobs">
           {showSample ? (

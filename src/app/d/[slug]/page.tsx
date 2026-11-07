@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
-import { getDetailerBySlug } from "@/lib/detailers";
+import { getDetailerBySlug, getPhotoUrls } from "@/lib/detailers";
 import { DEFAULT_BIO, listingFor, servicePrice, type VehicleSize } from "@/lib/sample-data";
 import { PhotoCarousel } from "@/components/detailers/photo-carousel";
 import { ReviewsBlock, ServicesList, ShowMore } from "@/components/profile/profile-parts";
@@ -25,6 +25,7 @@ export default async function DetailerProfile({ params, searchParams }: Props) {
   if (!found) notFound();
   const { detailer: d } = found;
 
+  const photos = (await getPhotoUrls([d.id]))[d.id];
   const l = listingFor(d.slug);
   const size: VehicleSize = sp.vehicle === "suv" || sp.vehicle === "truck" ? sp.vehicle : "sedan";
   const lead = l.services.find((s) => s.id === "premium") ?? l.services[0];
@@ -43,7 +44,7 @@ export default async function DetailerProfile({ params, searchParams }: Props) {
         </Link>
       </div>
 
-      <PhotoCarousel name={d.business_name} pill className="aspect-[4/3] sm:rounded-card md:aspect-[16/7]" />
+      <PhotoCarousel name={d.business_name} photos={photos} pill className="aspect-[4/3] sm:rounded-card md:aspect-[16/7]" />
 
       <div className="px-6 sm:px-0">
         <div className="pt-6">

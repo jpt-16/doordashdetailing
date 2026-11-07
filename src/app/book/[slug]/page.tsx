@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { brand } from "@config/brand";
-import { getDetailerBySlug } from "@/lib/detailers";
+import { getDetailerBySlug, getPhotoUrls } from "@/lib/detailers";
 import { getCurrentProfile } from "@/lib/auth";
 import { listingFor, type VehicleSize } from "@/lib/sample-data";
 import { BookingForm } from "@/components/booking/booking-form";
@@ -19,6 +19,7 @@ export default async function BookPage({ params, searchParams }: Props) {
   if (!found) notFound();
   const { detailer } = found;
   const profile = await getCurrentProfile();
+  const photo = (await getPhotoUrls([detailer.id]))[detailer.id]?.[0];
   const l = listingFor(detailer.slug);
   const size: VehicleSize =
     sp.vehicle === "suv" || sp.vehicle === "truck" || sp.vehicle === "sedan" ? sp.vehicle : (profile?.saved_vehicle_size ?? "sedan");
@@ -36,8 +37,8 @@ export default async function BookPage({ params, searchParams }: Props) {
         <h1 className="text-[26px] font-semibold leading-tight tracking-tight">{l.instant ? "Confirm and pay" : "Request to book"}</h1>
       </div>
       <BookingForm
-        slug={detailer.slug}
         name={detailer.business_name}
+        photo={photo}
         rating={l.rating}
         reviewCount={l.reviews.length}
         instant={l.instant}

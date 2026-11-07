@@ -7,6 +7,7 @@ Stack: Next.js (App Router) + TypeScript + Tailwind, Supabase (Postgres, Auth, R
 ## Build status
 
 - [x] Step 2: auth and roles
+- [x] Detailer photos: `supabase/migrations/0003_detailer_photos.sql` (table, public `detailer-photos` bucket, RLS). Apply it like the others, then detailers can upload up to 10 photos from their dashboard.
 - [x] UI refresh (from HANDOFF.md): tokens, header, stepped search, results, detailer profile, request-to-book screen, auth, dashboards. Services, photos, reviews and bookings are placeholders in `src/lib/sample-data.ts` until their tables exist.
 - [ ] Steps 3–9: profile onboarding, public page, booking, browse, job lifecycle, reviews, dashboards, seed data
 

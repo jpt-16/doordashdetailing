@@ -23,3 +23,11 @@ export interface Detailer {
   verified: boolean;
   created_at: string;
 }
+
+export interface DetailerPhoto {
+  id: string;
+  detailer_id: string;
+  path: string; // storage path inside the detailer-photos bucket
+  position: number;
+  created_at: string;
+}
