@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Icon, Stars, type IconName } from "@/components/ui/icons";
 import { Sheet } from "@/components/ui/sheet";
-import { servicePrice, type Review, type Service, type VehicleSize } from "@/lib/sample-data";
+import { priceOf, type Review, type Service, type VehicleSize } from "@/lib/sample-data";
 
 const catIcon: Record<Service["cat"], IconName> = { exterior: "drop", interior: "car", full: "sparkle", ceramic: "shield", fleet: "car" };
 
@@ -33,7 +33,7 @@ export function ServicesList({ services, size, factor }: { services: Service[]; 
           <li key={s.id} className="flex items-center gap-4 py-3">
             <Icon name={catIcon[s.cat]} size={24} />
             <span className="flex-1 text-base">{s.name}</span>
-            <span className="text-base font-semibold">${servicePrice(s.base, size, factor)}</span>
+            <span className="text-base font-semibold">${priceOf(s, size, factor)}</span>
           </li>
         ))}
       </ul>
@@ -54,7 +54,7 @@ export function ServicesList({ services, size, factor }: { services: Service[]; 
                 <p className="text-sm text-muted">{s.blurb}</p>
                 <p className="mt-1 text-sm text-muted">About {s.mins >= 60 ? `${Math.floor(s.mins / 60)} hr${s.mins % 60 ? ` ${s.mins % 60} min` : ""}` : `${s.mins} min`}</p>
               </div>
-              <p className="text-base font-semibold">${servicePrice(s.base, size, factor)}</p>
+              <p className="text-base font-semibold">${priceOf(s, size, factor)}</p>
             </li>
           ))}
         </ul>

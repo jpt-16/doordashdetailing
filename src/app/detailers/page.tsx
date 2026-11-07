@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { format } from "date-fns";
-import { getApprovedDetailers, getPhotoUrls } from "@/lib/detailers";
-import { fromPrice, listingFor, SERVICES, type VehicleSize } from "@/lib/sample-data";
+import { getApprovedDetailers, getListings, getPhotoUrls } from "@/lib/detailers";
+import { fromPrice, type VehicleSize } from "@/lib/sample-data";
 import { CategoryTabs } from "@/components/detailers/category-tabs";
 import { FiltersButton } from "@/components/detailers/filters-sheet";
 import { DetailerCard } from "@/components/detailers/detailer-card";
@@ -21,17 +21,18 @@ export default async function DetailersPage({ searchParams }: { searchParams: Pr
   const max = sp.max ? Number(sp.max) : Infinity;
 
   const { detailers, sample } = await getApprovedDetailers();
+  const listings = await getListings(detailers);
   const results = detailers
     .filter((d) => {
-      const l = listingFor(d.slug);
-      const p = fromPrice(d.slug, size);
+      const l = listings[d.id];
+      const p = fromPrice(l, size);
+      if (p === null) return false; // no services listed yet
       if (service !== "all" && !l.services.some((s) => s.cat === service)) return false;
       if (sp.type === "instant" && !l.instant) return false;
       if (sp.type === "request" && l.instant) return false;
       return p >= min && p <= max;
     })
-    .sort((a, b) => listingFor(b.slug).rating - listingFor(a.slug).rating);
-
+    .sort((a, b) => (listings[b.id].rating ?? 0) - (listings[a.id].rating ?? 0));
   const photoMap = await getPhotoUrls(results.map((d) => d.id));
 
   // Carry the search through to the profile and booking pages.
@@ -70,13 +71,13 @@ export default async function DetailersPage({ searchParams }: { searchParams: Pr
       )}
 
       <p className="text-sm text-muted">
-        {results.length} {results.length === 1 ? "detailer" : "detailers"} · {SERVICES.length} services across the area
+        {results.length} {results.length === 1 ? "detailer" : "detailers"}
       </p>
 
       {results.length > 0 ? (
         <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
           {results.map((d, i) => (
-            <DetailerCard key={d.id} detailer={d} photos={photoMap[d.id]} query={query} size={size} index={i} />
+            <DetailerCard key={d.id} detailer={d} listing={listings[d.id]} photos={photoMap[d.id]} query={query} size={size} index={i} />
           ))}
         </ul>
       ) : (

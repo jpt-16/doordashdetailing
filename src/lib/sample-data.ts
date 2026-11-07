@@ -12,6 +12,8 @@ export interface Service {
   mins: number;
   base: number; // sedan price in dollars
   cat: "exterior" | "interior" | "full" | "ceramic" | "fleet";
+  /** Exact prices by vehicle size, in dollars. Real services set this; sample services scale from `base`. */
+  prices?: Record<VehicleSize, number>;
 }
 
 export const SERVICES: Service[] = [
@@ -38,6 +40,10 @@ export function servicePrice(base: number, size: VehicleSize, factor = 1) {
   return Math.round(base * SIZE_FACTOR[size] * factor);
 }
 
+export function priceOf(s: Service, size: VehicleSize, factor = 1) {
+  return s.prices ? s.prices[size] : servicePrice(s.base, size, factor);
+}
+
 export interface Review {
   name: string;
   when: string;
@@ -58,14 +64,16 @@ const REVIEWS: Review[] = [
 ];
 
 export interface Listing {
-  rating: number;
+  rating: number | null; // null until there are reviews
   reviews: Review[];
-  years: number;
-  jobs: number;
-  factor: number; // price multiplier vs the base menu
+  years: number | null;
+  factor: number; // price multiplier for sample services; real services carry exact prices
   instant: boolean;
   services: Service[];
-  replyHours: number;
+  replyHours: number | null;
+  /** Real detailers must have set weekly availability before they can be booked. */
+  bookable: boolean;
+  sample: boolean;
 }
 
 function hash(s: string) {
@@ -83,20 +91,20 @@ export function listingFor(slug: string): Listing {
     rating,
     reviews,
     years: 1 + (h % 7),
-    jobs: 20 + (h % 180),
     factor: [0.9, 1, 1.1, 1.2][h % 4],
     instant: h % 2 === 0,
     services,
     replyHours: 1 + (h % 3),
+    bookable: false, // sample detailers are for review only
+    sample: true,
   };
 }
 
-export function fromPrice(slug: string, size: VehicleSize = "sedan") {
-  const l = listingFor(slug);
-  return Math.min(...l.services.map((s) => servicePrice(s.base, size, l.factor)));
+export function fromPrice(l: Listing, size: VehicleSize = "sedan") {
+  return l.services.length ? Math.min(...l.services.map((s) => priceOf(s, size, l.factor))) : null;
 }
 
-const base = { user_id: "sample", bio: "", zip: "01701", status: "approved" as const, created_at: "2026-01-01" };
+const base = { instant_book: false, jobs_per_window: 1, user_id: "sample", bio: "", zip: "01701", status: "approved" as const, created_at: "2026-01-01" };
 export const SAMPLE_DETAILERS: Detailer[] = [
   { ...base, id: "s1", slug: "bay-state-mobile-detail", business_name: "Bay State Mobile Detail", town: "Framingham", verified: true,
     bio: "Bay State is built for busy drivers. We bring water, power and everything else, so you never have to move your car. Every job is photographed and you get a receipt in the app. We work on sedans, SUVs and light trucks across Framingham, Natick and Ashland." },

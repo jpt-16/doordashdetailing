@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { brand } from "@config/brand";
-import { getDetailerBySlug, getPhotoUrls } from "@/lib/detailers";
+import { getDetailerBySlug, getListing, getPhotoUrls } from "@/lib/detailers";
 import { getCurrentProfile } from "@/lib/auth";
-import { listingFor, type VehicleSize } from "@/lib/sample-data";
+import { getSlots } from "@/lib/slots";
+import type { VehicleSize } from "@/lib/sample-data";
 import { BookingForm } from "@/components/booking/booking-form";
 import { Icon } from "@/components/ui/icons";
 
@@ -20,7 +21,9 @@ export default async function BookPage({ params, searchParams }: Props) {
   const { detailer } = found;
   const profile = await getCurrentProfile();
   const photo = (await getPhotoUrls([detailer.id]))[detailer.id]?.[0];
-  const l = listingFor(detailer.slug);
+  const l = await getListing(detailer);
+  const bookable = !l.sample && l.bookable && l.services.length > 0;
+  const slots = bookable ? await getSlots(detailer) : [];
   const size: VehicleSize =
     sp.vehicle === "suv" || sp.vehicle === "truck" || sp.vehicle === "sedan" ? sp.vehicle : (profile?.saved_vehicle_size ?? "sedan");
 
@@ -34,9 +37,10 @@ export default async function BookPage({ params, searchParams }: Props) {
         >
           <Icon name="chevL" size={22} />
         </Link>
-        <h1 className="text-[26px] font-semibold leading-tight tracking-tight">{l.instant ? "Confirm and pay" : "Request to book"}</h1>
+        <h1 className="text-[26px] font-semibold leading-tight tracking-tight">{l.instant ? "Confirm and book" : "Request to book"}</h1>
       </div>
       <BookingForm
+        detailerId={detailer.id}
         name={detailer.business_name}
         photo={photo}
         rating={l.rating}
@@ -44,14 +48,17 @@ export default async function BookPage({ params, searchParams }: Props) {
         instant={l.instant}
         services={l.services}
         factor={l.factor}
+        slots={slots}
+        sample={l.sample}
+        bookable={bookable}
         initial={{
-          service: sp.service ?? l.services[0].id,
+          service: sp.service ?? l.services[0]?.id ?? "",
           date: sp.date ?? "",
-          window: sp.window ?? "morning",
+          window: sp.window ?? "",
           vehicle: size,
           where: sp.where ?? profile?.saved_address ?? "",
         }}
-        signedIn={!!profile}
+        role={profile?.role ?? null}
         depositPercent={brand.depositPercent}
       />
     </div>
