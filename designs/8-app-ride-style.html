@@ -1,0 +1,319 @@
+<title>DetailDash App</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..800&display=swap">
+<style>
+/* Layout: page shows one interactive phone plus a screen list, or a board of every screen. Inside the phone: ride-hailing app patterns. White, black, gray tiles, map plus bottom sheet, black primary button. */
+:root{--bg:#eceef1;--panel:#fff;--fg:#0a0a0a;--muted:#5c6470;--line:#d9dde3;--btn:#0a0a0a;--on-btn:#fff;--sans:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0f12;--panel:#171a1f;--fg:#f2f4f7;--muted:#97a0ad;--line:#2a2f37;--btn:#f2f4f7;--on-btn:#0a0a0a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d0f12;--panel:#171a1f;--fg:#f2f4f7;--muted:#97a0ad;--line:#2a2f37;--btn:#f2f4f7;--on-btn:#0a0a0a;color-scheme:dark}
+*{box-sizing:border-box}h1,h2,h3,p{margin:0}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--fg);font:500 15px/1.45 var(--sans);-webkit-font-smoothing:antialiased;padding-block:22px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid #276ef1;outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.top{display:flex;flex-wrap:wrap;gap:14px 24px;justify-content:space-between;align-items:flex-end}
+.top h1{font-size:clamp(1.7rem,4.4vw,2.6rem);letter-spacing:-.035em;line-height:1.05;font-weight:800}
+.top p{color:var(--muted);margin-top:8px;max-width:48ch}
+.ctl{display:flex;gap:10px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px}
+.seg button{padding:8px 14px;border-radius:9px;font-weight:700;font-size:.88rem;color:var(--muted);min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--btn);color:var(--on-btn)}
+.stage{display:grid;grid-template-columns:minmax(0,392px) minmax(0,1fr);gap:40px;align-items:start}
+@media(max-width:860px){.stage{grid-template-columns:minmax(0,1fr);justify-items:center}.side{width:100%}}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0;width:100%}
+.side h2{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:10px}
+.jump{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.jump button{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-weight:700;min-height:54px;display:flex;flex-direction:column}
+.jump button small{color:var(--muted);font-weight:500;font-size:.76rem}
+.jump button[aria-current="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.jump button:active{transform:scale(.98)}
+.note{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.note b{display:block;font-size:1.05rem;letter-spacing:-.02em;margin-bottom:6px}
+.note p{color:var(--muted)}
+.board{display:flex;gap:26px;overflow-x:auto;padding:6px 4px 20px;scroll-snap-type:x proximity}
+.board>figure{margin:0;flex:none;scroll-snap-align:start}
+.board figcaption{font-weight:800;margin-top:10px;font-size:.9rem}
+.bw{width:calc(392px*.62);height:calc(820px*.62);position:relative}
+.bw .device{zoom:.62;position:absolute;left:0;top:0;width:392px}
+.bw .device{pointer-events:none}
+
+/* device */
+.device{width:min(392px,100%);background:#0a0a0a;border-radius:56px;padding:11px;box-shadow:0 30px 60px -22px rgba(0,0,0,.5)}
+.phone{--ph:798px;position:relative;height:var(--ph);border-radius:45px;overflow:hidden;background:#fff;color:#0a0a0a;isolation:isolate;display:flex;flex-direction:column;font-family:var(--sans)}
+.isl{position:absolute;top:11px;left:50%;translate:-50% 0;width:108px;height:31px;border-radius:20px;background:#000;z-index:50}
+.sb{position:absolute;inset:0 0 auto;height:54px;padding:18px 32px 0;display:flex;justify-content:space-between;font-weight:700;font-size:.95rem;z-index:40;pointer-events:none}
+.sc{flex:1;overflow-y:auto;padding-top:54px;scrollbar-width:none;overscroll-behavior:contain;display:flex;flex-direction:column}
+.sc::-webkit-scrollbar{display:none}
+.hbar{position:absolute;bottom:7px;left:50%;translate:-50% 0;width:134px;height:5px;border-radius:3px;background:#0a0a0a;z-index:45;pointer-events:none}
+.tabs{display:flex;border-bottom:1px solid #e6e6e6;position:relative}
+.tabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:1.02rem;padding:12px 0 14px;min-height:50px;color:#0a0a0a;position:relative}
+.tabs button[aria-selected="true"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:#0a0a0a}
+.tabs button[disabled]{color:#8c8c8c}
+.soon{font-size:.62rem;font-weight:800;background:#e8e8e8;border-radius:5px;padding:2px 6px;letter-spacing:.04em;text-transform:uppercase;color:#444}
+.where{margin:16px 16px 0;display:flex;align-items:center;gap:10px;background:#eee;border-radius:12px;min-height:52px;padding:0 8px 0 14px;font-weight:700;font-size:1.12rem;text-align:left;width:calc(100% - 32px);transition:background .12s,transform .1s}
+.where:active{background:#e0e0e0;transform:scale(.99)}
+.where .g{flex:1;color:#222}
+.now{display:inline-flex;align-items:center;gap:6px;background:#fff;border-radius:999px;padding:0 12px;min-height:34px;font-size:.88rem;font-weight:700}
+.rec{display:flex;align-items:center;gap:14px;padding:12px 16px;width:100%;text-align:left;min-height:62px}
+.rec .ci{width:34px;height:34px;border-radius:50%;background:#eee;display:grid;place-items:center;flex:none}
+.rec b{display:block;font-size:1rem}.rec span{color:#6b6b6b;font-size:.88rem}
+.rec:active{background:#f4f4f4}
+.sh{display:flex;justify-content:space-between;align-items:baseline;padding:20px 16px 12px}
+.sh h2{font-size:1.14rem;font-weight:700;letter-spacing:-.01em}.sh a,.sh button{font-size:.88rem;font-weight:700}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px}
+.tile{position:relative;background:#f3f3f3;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;padding:8px 2px 10px;min-height:92px;font-size:.78rem;font-weight:600;transition:transform .1s,background .12s}
+.tile:active{transform:scale(.95);background:#e6e6e6}
+.tile svg{width:46px;height:46px}
+.promo-b{position:absolute;top:-9px;left:50%;translate:-50% 0;background:#0e8345;color:#fff;font-size:.66rem;font-weight:700;padding:2px 7px;border-radius:5px}
+.banner{margin:18px 16px 0;border-radius:14px;background:#0a0a0a;color:#fff;padding:18px;min-height:118px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;text-align:left;width:calc(100% - 32px)}
+.banner b{font-size:1.05rem;max-width:14ch;line-height:1.2;position:relative;z-index:1;display:block}
+.banner span{font-size:.84rem;font-weight:700;position:relative;z-index:1}
+.banner svg{position:absolute;right:-12px;top:-12px;width:190px;opacity:.95}
+.tb{display:flex;justify-content:space-around;padding:8px 6px 26px;border-top:1px solid #e6e6e6;background:#fff;position:relative;z-index:30}
+.tb button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.7rem;font-weight:600;color:#7d7d7d;min-width:68px;min-height:46px;padding-top:4px}
+.tb button[aria-current="page"]{color:#0a0a0a;font-weight:700}
+.tb button:active{transform:scale(.94)}
+.dot{position:relative}.dot::after{content:"";position:absolute;top:-1px;right:-3px;width:8px;height:8px;border-radius:50%;background:#276ef1;border:2px solid #fff}
+.h1{font-size:2rem;letter-spacing:-.035em;font-weight:800;padding:8px 16px 14px;line-height:1.1}
+.h3{font-size:1.2rem;font-weight:700;padding:14px 16px 12px;letter-spacing:-.015em}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px}
+.sep{height:8px;background:#f1f1f1;margin-top:20px}
+
+/* map + sheet */
+.mapw{position:relative;flex:none;height:300px;background:#e9ebee}
+.mapw svg.map{position:absolute;inset:0;width:100%;height:100%}
+.rnd{position:absolute;width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.2);display:grid;place-items:center;z-index:5}
+.rnd:active{transform:scale(.92)}
+.addr{position:absolute;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.2);padding:7px 10px;font-size:.84rem;font-weight:700;display:flex;gap:6px;align-items:center;z-index:5;max-width:210px;white-space:nowrap}
+.addr i{width:8px;height:8px;background:#0a0a0a;flex:none}.addr i.c{border-radius:50%}
+.addr em{font-style:normal;background:#0a0a0a;color:#fff;border-radius:4px;padding:1px 6px;font-size:.7rem}
+.sheet{flex:1;background:#fff;border-radius:18px 18px 0 0;margin-top:-18px;position:relative;z-index:6;display:flex;flex-direction:column;box-shadow:0 -4px 16px rgba(0,0,0,.08);min-height:0}
+.sheet .ttl{text-align:center;font-weight:700;padding:14px 0 12px;font-size:1.02rem;border-bottom:1px solid #eee}
+.svcs{display:flex;gap:8px;padding:12px 16px 10px;overflow-x:auto;scrollbar-width:none}
+.svcs::-webkit-scrollbar{display:none}
+.sv{flex:none;border-radius:999px;background:#eee;font-weight:700;font-size:.86rem;padding:0 14px;min-height:36px;transition:transform .1s}
+.sv:active{transform:scale(.95)}
+.sv[aria-pressed="true"]{background:#0a0a0a;color:#fff}
+.list{flex:1;overflow-y:auto;scrollbar-width:none;padding:2px 10px}
+.list::-webkit-scrollbar{display:none}
+.opt{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 12px 10px 4px;border-radius:12px;border:2px solid transparent;min-height:78px;transition:transform .1s}
+.opt:active{transform:scale(.99)}
+.opt[aria-checked="true"]{border-color:#0a0a0a}
+.opt .van{width:78px;flex:none}
+.opt .mid{flex:1;min-width:0}
+.opt .nm{font-weight:700;font-size:1.04rem;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.opt .nm span.t{overflow:hidden;text-overflow:ellipsis}
+.opt .sb2{font-size:.8rem;color:#5e5e5e;margin-top:1px;white-space:nowrap}
+.opt .pr{font-weight:700;font-size:1.04rem;font-variant-numeric:tabular-nums}
+.tag{display:inline-flex;align-items:center;gap:3px;background:#276ef1;color:#fff;border-radius:4px;font-size:.66rem;font-weight:700;padding:1px 5px;margin-top:3px}
+.tag.g{background:#e6e6e6;color:#222}
+.foot{border-top:1px solid #eee;padding:10px 16px 28px;background:#fff}
+.pay{display:flex;align-items:center;gap:10px;width:100%;padding:8px 0 12px;font-weight:700;text-align:left}
+.pay span.cc{width:30px;height:20px;border-radius:4px;background:#1a1f71;display:grid;place-items:center;color:#fff;font-size:.55rem;font-weight:800;font-style:italic}
+.pay .a{margin-left:auto;color:#6b6b6b}
+.fr{display:flex;gap:10px}
+.cta{flex:1;background:#0a0a0a;color:#fff;border-radius:10px;min-height:54px;font-weight:700;font-size:1.04rem;transition:transform .1s,background .15s}
+.cta:active{transform:scale(.98);background:#2a2a2a}
+.cta.w{background:#eee;color:#0a0a0a}
+.sq{width:54px;min-height:54px;border-radius:10px;background:#eee;display:grid;place-items:center;flex:none}
+.sq:active{transform:scale(.94)}
+
+/* confirmed */
+.row2{display:flex;gap:14px;padding:14px 16px;align-items:flex-start;border-top:1px solid #eee}
+.row2 .ic{width:40px;height:40px;border-radius:50%;background:#eee;display:grid;place-items:center;flex:none}
+.row2 b{display:block}.row2 span{color:#5e5e5e;font-size:.9rem}
+.card{margin:0 16px;border:1px solid #e3e3e3;border-radius:14px;overflow:hidden}
+.card .mapw{height:150px;margin-top:0}
+.stp{display:flex;flex-direction:column;padding:6px 16px}
+.stp div{display:flex;gap:14px;align-items:flex-start;padding-bottom:16px;position:relative}
+.stp div::before{content:"";position:absolute;left:8.5px;top:20px;bottom:0;width:2px;background:#e3e3e3}
+.stp div:last-child::before{display:none}
+.stp i{width:18px;height:18px;border-radius:50%;border:2px solid #cfcfcf;background:#fff;flex:none;margin-top:2px}
+.stp .d i{background:#0a0a0a;border-color:#0a0a0a}
+.stp .n i{border-color:#0a0a0a;box-shadow:0 0 0 4px #e6e6e6}
+.stp .p{color:#8a8a8a}
+.stp b{display:block;font-size:.98rem}.stp span{font-size:.84rem;color:#6b6b6b}
+.act{display:flex;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid #eee;width:100%;text-align:left}
+.act .th{width:56px;height:56px;border-radius:10px;background:#f3f3f3;display:grid;place-items:center;flex:none}
+.act .i{flex:1;min-width:0}.act b{display:block}.act span{color:#6b6b6b;font-size:.86rem;display:block}
+.rb{background:#eee;border-radius:999px;font-weight:700;font-size:.84rem;min-height:36px;padding:0 14px;display:inline-flex;align-items:center;gap:6px}
+.rb:active{transform:scale(.95)}
+/* pro */
+.bigt{display:flex;align-items:center;gap:12px;background:#0a0a0a;color:#fff;border-radius:999px;min-height:50px;padding:0 8px 0 20px;font-weight:700;position:absolute;left:50%;translate:-50% 0;bottom:14px;z-index:6}
+.sw2{width:48px;height:30px;border-radius:15px;background:#3a3a3a;position:relative;transition:background .2s}
+.sw2::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .25s cubic-bezier(.3,1.3,.5,1)}
+.sw2.on{background:#06c167}.sw2.on::after{transform:translateX(18px)}
+.earn{position:absolute;left:50%;translate:-50% 0;top:62px;z-index:6;background:#0a0a0a;color:#fff;border-radius:999px;padding:8px 18px;font-weight:800;font-size:1.3rem;letter-spacing:-.02em;display:flex;align-items:center;gap:6px}
+.offer{background:#fff;padding:16px 16px 28px;border-radius:18px 18px 0 0;margin-top:-18px;position:relative;z-index:6;box-shadow:0 -4px 16px rgba(0,0,0,.1)}
+.cd{height:5px;border-radius:3px;background:#eee;overflow:hidden;margin-bottom:14px}
+.cd i{display:block;height:100%;background:#0a0a0a;width:100%;animation:cd 15s linear forwards}
+@keyframes cd{to{width:0}}
+.big{font-size:2.3rem;font-weight:800;letter-spacing:-.04em}
+.bars{display:flex;align-items:flex-end;gap:10px;height:120px;padding:0 16px}
+.bars i{flex:1;background:#e3e3e3;border-radius:5px 5px 2px 2px}.bars i.c{background:#0a0a0a}
+.tst{position:absolute;left:14px;right:14px;bottom:100px;z-index:60;background:#0a0a0a;color:#fff;border-radius:12px;padding:12px 16px;font-weight:600;animation:up .25s both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+ <header class="top">
+  <div><h1>DetailDash app</h1><p>Mobile screens in a ride-hailing style: search first, map and bottom sheet, one black button. Tap through the phone or view every screen at once.</p></div>
+  <div class="ctl"><div class="seg" id="roles" role="group" aria-label="App"></div><div class="seg" id="views" role="group" aria-label="View"></div></div>
+ </header>
+ <div id="out"></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s)};
+var DET=[
+ {id:1,n:"Bay State Mobile Detail",c:"#2b6cff",m:"i",f:1,t:"Sat 9:00 AM",mi:2.1,tag:"Fastest",r:4.9},
+ {id:2,n:"Sudbury Shine Co.",c:"#12a38a",m:"r",f:1.1,t:"Sat 11:30 AM",mi:5.4,tag:"",r:4.8},
+ {id:3,n:"Marcus Auto Spa",c:"#e8662b",m:"i",f:.9,t:"Today 4:30 PM",mi:3.8,tag:"Cheapest",r:4.7},
+ {id:4,n:"Natick Nano Detail",c:"#7b4fe0",m:"r",f:1.3,t:"Sun 10:00 AM",mi:7.9,tag:"Top rated",r:5.0}];
+var SV=[["wash","Exterior wash",50],["int","Interior",140],["prem","Premium",85],["full","Full detail",245]];
+var S={role:"customer",screen:"home",view:"phone",sel:1,svc:"prem",stage:1,online:true,offer:true,toast:""};
+var price=function(d,s){var b=SV.filter(function(x){return x[0]===(s||S.svc)})[0][2];return Math.round(b*d.f)};
+var det=function(){return DET.filter(function(d){return d.id===S.sel})[0]};
+
+/* icons */
+var I={
+ back:'<path d="m15 5-7 7 7 7"/>',x:'<path d="M6 6l12 12M18 6 6 18"/>',srch:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.500-3.500"/>',
+ clk:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',home:'<path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/>',
+ grid:'<rect x="4" y="4" width="4" height="4" rx="1"/><rect x="10" y="4" width="4" height="4" rx="1"/><rect x="16" y="4" width="4" height="4" rx="1"/><rect x="4" y="10" width="4" height="4" rx="1"/><rect x="10" y="10" width="4" height="4" rx="1"/><rect x="16" y="10" width="4" height="4" rx="1"/><rect x="4" y="16" width="4" height="4" rx="1"/><rect x="10" y="16" width="4" height="4" rx="1"/><rect x="16" y="16" width="4" height="4" rx="1"/>',
+ doc:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4.500 20c.8-4 4-6 7.500-6s6.700 2 7.500 6"/>',
+ chev:'<path d="m9 5 7 7-7 7"/>',cal:'<rect x="3.500" y="5" width="17" height="15" rx="3"/><path d="M8 3v4M16 3v4M3.500 10h17"/>',pin:'<path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.500"/>',
+ bolt:'<path d="M13 2 4 14h6l-1 8 9-12h-6z"/>',star:'<path d="m12 3 2.700 5.600 6.100.8-4.500 4.200 1.100 6.100L12 16.800 6.600 19.700l1.100-6.100L3.200 9.400l6.100-.8z"/>',
+ chat:'<path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/>',nav:'<path d="M12 3 5 20l7-4 7 4z"/>',
+ card:'<rect x="3" y="6" width="18" height="12" rx="3"/><path d="M3 10.500h18"/>',dollar:'<circle cx="12" cy="12" r="9"/><path d="M14.500 9.500c0-1.100-1.100-2-2.500-2s-2.500.9-2.500 2 1 1.700 2.500 2 2.500.9 2.500 2.200-1.100 2.300-2.500 2.300-2.500-.9-2.500-2.200M12 6v1.500M12 16.500V18"/>'};
+var ic=function(n,s,w,fill){s=s||22;return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="'+(fill?'currentColor':'none')+'" stroke="'+(fill?'none':'currentColor')+'" stroke-width="'+(w||2)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+I[n]+'</svg>'};
+/* detailing van art */
+function van(c,sz){return '<svg viewBox="0 0 120 70" width="'+(sz||78)+'" aria-hidden="true"><ellipse cx="60" cy="62" rx="48" ry="4.500" fill="#000" opacity=".12"/><path d="M12 50V26c0-4 3-7 7-7h46c5 0 9 2 12 6l14 12c3 3 5 6 5 10v3z" fill="'+c+'"/><path d="M80 28 70 22h14l10 8z" fill="#fff" opacity=".0"/><path d="M72 26h10l12 11H72z" fill="#e8eef7"/><path d="M12 50h98v3a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3z" fill="#1b1b1b" opacity=".85"/><circle cx="33" cy="54" r="9" fill="#111"/><circle cx="33" cy="54" r="3.500" fill="#cfd6de"/><circle cx="90" cy="54" r="9" fill="#111"/><circle cx="90" cy="54" r="3.500" fill="#cfd6de"/><path d="M38 27c3 4 5 7 5 10a5 5 0 0 1-10 0c0-3 2-6 5-10z" fill="#fff" opacity=".95"/><rect x="48" y="31" width="14" height="3" rx="1.500" fill="#fff" opacity=".6"/><rect x="48" y="37" width="9" height="3" rx="1.500" fill="#fff" opacity=".4"/></svg>'}
+function svcIc(k){
+ var a={wash:'<path d="M23 8c5 6 9 10 9 16a9 9 0 0 1-18 0c0-6 4-10 9-16z" fill="#4aa8ff"/><path d="M19 25a5 5 0 0 0 4 5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M34 12l1.500 3.500L39 17l-3.500 1.500L34 22l-1.500-3.500L29 17l3.500-1.500z" fill="#ffc83d"/>',
+ int:'<rect x="12" y="22" width="22" height="12" rx="4" fill="#59616e"/><path d="M14 22v-8a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z" fill="#8d96a5"/><rect x="10" y="26" width="5" height="10" rx="2.500" fill="#3f4650"/><rect x="31" y="26" width="5" height="10" rx="2.500" fill="#3f4650"/>',
+ full:'<path d="M23 7l3.500 9.500L36 20l-9.500 3.500L23 33l-3.500-9.500L10 20l9.500-3.500z" fill="#ffc83d"/><path d="M35 28l1.800 4.200L41 34l-4.200 1.800L35 40l-1.800-4.200L29 34l4.200-1.800z" fill="#4aa8ff"/>',
+ re:'<path d="M12 22a11 11 0 0 1 19-7l3-3v10H24l3.500-3.500A6 6 0 0 0 17 22" fill="#0a0a0a"/><path d="M34 24a11 11 0 0 1-19 7l-3 3V24h10l-3.500 3.500A6 6 0 0 0 29 24" fill="#0a0a0a"/>',
+ cer:'<path d="M23 8 11 13v9c0 8 5 14 12 17 7-3 12-9 12-17v-9z" fill="#7b8cff"/><path d="m17 23 4 4 8-8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+ pet:'<circle cx="13" cy="21" r="3.500" fill="#8a5a3c"/><circle cx="20" cy="14" r="3.500" fill="#8a5a3c"/><circle cx="28" cy="14" r="3.500" fill="#8a5a3c"/><circle cx="35" cy="21" r="3.500" fill="#8a5a3c"/><path d="M16 33c0-5 4-9 8-9s8 4 8 9c0 3-4 4-8 4s-8-1-8-4z" fill="#8a5a3c"/>',
+ hl:'<circle cx="19" cy="23" r="9" fill="#ffc83d"/><circle cx="19" cy="23" r="4.500" fill="#fff"/><path d="M32 17h8M32 23h8M32 29h8" stroke="#ffc83d" stroke-width="3" stroke-linecap="round"/>',
+ odor:'<path d="M14 30c0-6 8-6 8-12M24 34c0-6 8-6 8-12M34 30c0-6 6-5 6-10" stroke="#59b36a" stroke-width="3.500" fill="none" stroke-linecap="round"/>'};
+ return '<svg viewBox="0 0 46 46">'+a[k]+'</svg>'}
+
+/* map */
+function map(r,w){var h=r?'':'';return '<svg class="map" viewBox="0 0 392 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="392" height="300" fill="#e9ebee"/><path d="M-10 250C80 230 140 280 230 250S360 230 410 250V310H-10z" fill="#cfe3f5"/><rect x="262" y="40" width="130" height="86" rx="10" fill="#d4e8d0"/><rect x="20" y="150" width="90" height="60" rx="8" fill="#d4e8d0"/><g stroke="#fff" stroke-linecap="round" fill="none"><path d="M-10 90H410" stroke-width="12"/><path d="M-10 190 410 170" stroke-width="9"/><path d="M130-10 150 310" stroke-width="12"/><path d="M270-10 250 310" stroke-width="9"/><path d="M30 20 360 130" stroke-width="7"/><path d="M-10 40 410 40" stroke-width="5"/><path d="M60-10V310" stroke-width="5"/><path d="M340-10V310" stroke-width="5"/></g><g fill="#6e7681" font-size="10" font-weight="700" opacity=".75" font-family="DM Sans,sans-serif"><text x="160" y="84">Route 9</text><text x="284" y="164">Concord St</text><text x="156" y="30" transform="rotate(8 156 30)">Edgell Rd</text></g>'+
+ (r?'<path d="M96 196 150 190 152 90 258 88 262 52" stroke="#0a0a0a" stroke-width="4" fill="none" stroke-linejoin="round"/><rect x="90" y="190" width="12" height="12" fill="#0a0a0a"/><circle cx="262" cy="50" r="7" fill="#fff" stroke="#0a0a0a" stroke-width="4"/>':'<circle cx="150" cy="150" r="9" fill="#276ef1" stroke="#fff" stroke-width="4"/><circle cx="150" cy="150" r="26" fill="#276ef1" opacity=".15"/>')+
+ (w?'':'')+'<g>'+[[200,110,"#2b6cff"],[310,100,"#12a38a"],[210,215,"#e8662b"],[80,110,"#7b4fe0"]].map(function(p){return '<g transform="translate('+p[0]+' '+p[1]+')"><rect x="-9" y="-9" width="18" height="18" rx="5" fill="#fff" stroke="#0a0a0a" stroke-width="1.500"/><circle r="4" fill="'+p[2]+'"/></g>'}).join('')+'</g></svg>'}
+
+/* screens */
+function tabbar(cur,role){
+ var T=role==="pro"?[["pro1","home","Home"],["pro3","dollar","Earnings"],["pro2","doc","Jobs"],["acc","user","Account"]]:[["home","home","Home"],["services","grid","Services"],["activity","doc","Activity"],["acc","user","Account"]];
+ return '<nav class="tb" aria-label="Main">'+T.map(function(t){return '<button data-go="'+t[0]+'" '+(t[0]===cur?'aria-current="page"':'')+'>'+ic(t[1],24,t[0]===cur?2.4:1.8,t[0]===cur&&t[1]==="home")+t[2]+'</button>'}).join('')+'</nav>'}
+function home(){
+ return '<div class="sc"><div class="tabs"><button aria-selected="true">'+ic("home",20,2)+'Detailing</button><button disabled>'+ic("cal",20,2)+'Plans <span class="soon">Soon</span></button></div>'+
+ '<button class="where" data-go="choose">'+ic("srch",22,2.4)+'<span class="g">Where is the car?</span><span class="now">'+ic("clk",16,2.4)+'Now '+ic("chev",12,3)+'</span></button>'+
+ '<button class="rec" data-go="choose"><span class="ci">'+ic("clk",18,2)+'</span><span><b>14 Edgell Rd</b><span>Framingham, MA</span></span></button>'+
+ '<button class="rec" data-go="choose"><span class="ci">'+ic("clk",18,2)+'</span><span><b>1 Speen St</b><span>Work &middot; Framingham, MA</span></span></button>'+
+ '<div class="sh"><h2>Suggestions</h2><button data-go="services">See all</button></div>'+
+ '<div class="tiles">'+[["wash","Wash",1],["int","Interior",0],["full","Full detail",0],["re","Book again",0]].map(function(t){return '<button class="tile" data-svc="'+t[0]+'">'+(t[2]?'<span class="promo-b">Promo</span>':'')+svcIc(t[0])+t[1]+'</button>'}).join('')+'</div>'+
+ '<button class="banner" data-go="choose"><b>$15 off your first detail</b><span>Redeem now &rarr;</span><svg viewBox="0 0 190 130"><g fill="#fff" opacity=".12"><path d="M130 10c20 24 36 42 36 66a36 36 0 0 1-72 0c0-24 16-42 36-66z"/><path d="M60 50c10 12 18 22 18 34a18 18 0 0 1-36 0c0-12 8-22 18-34z"/></g><g fill="#ffc83d"><path d="M170 20l4 9 9 4-9 4-4 9-4-9-9-4 9-4z"/></g></svg></button>'+
+ '<div style="flex:1;min-height:20px"></div></div>'+tabbar("home")}
+function services(){
+ var g=function(k,l,sv){return '<button class="tile" data-svc="'+sv+'">'+svcIc(k)+l+'</button>'};
+ return '<div class="sc"><div class="h1">Services</div><div class="h3" style="padding-top:2px">Detail your car</div>'+
+ '<div class="grid4">'+g("wash","Exterior",'wash')+g("int","Interior",'int')+g("full","Full detail",'full')+g("cer","Ceramic",'full')+'</div><div style="height:8px"></div>'+
+ '<div class="grid4">'+g("pet","Pet hair",'int')+g("hl","Headlights",'wash')+g("odor","Odor",'int')+g("re","Rebook",'wash')+'</div>'+
+ '<div class="sep"></div><div class="h3">Plans</div><div class="grid3"><div class="tile" style="opacity:.55">'+svcIc("re")+'Recurring <span class="soon">Soon</span></div></div>'+
+ '<div class="sep"></div><div class="h3">For detailers</div><div class="grid3"><button class="tile" data-role="pro">'+svcIc("wash")+'Go to Pro app</button></div><div style="height:18px"></div></div>'+tabbar("services")}
+
+function choose(){
+ var list=DET.slice().sort(function(a,b){return a.id-b.id}),d=det();
+ return '<div class="mapw">'+map(true)+'<button class="rnd" data-go="home" style="left:14px;top:62px" aria-label="Back">'+ic("back",22,2.6)+'</button>'+
+ '<div class="addr" style="left:130px;top:70px"><i></i>14 Edgell Rd '+ic("chev",12,3)+'</div><div class="addr" style="left:184px;top:176px"><i class="c"></i>Bay State route<em>'+d.mi.toFixed(0)+' MIN</em></div></div>'+
+ '<div class="sheet"><div class="ttl">Choose a detailer</div>'+
+ '<div class="svcs" role="group" aria-label="Service">'+SV.map(function(s){return '<button class="sv" data-s="'+s[0]+'" aria-pressed="'+(S.svc===s[0])+'">'+s[1]+'</button>'}).join('')+'</div>'+
+ '<div class="list" role="radiogroup" aria-label="Detailers">'+list.map(function(x){var on=x.id===S.sel;return '<button class="opt" role="radio" aria-checked="'+on+'" data-sel="'+x.id+'">'+van(x.c)+'<span class="mid"><span class="nm"><span class="t">'+x.n+'</span></span><span class="sb2" style="display:block">'+x.t+' &middot; '+x.mi+' mi &middot; '+x.r.toFixed(1)+' &#9733;</span>'+
+  '<span class="tag '+(x.m==="i"?'':'g')+'">'+(x.m==="i"?ic("bolt",9,0,true)+' Instant book':'Request')+'</span> '+(x.tag?'<span class="tag g">'+x.tag+'</span>':'')+'</span><span class="pr">$'+price(x)+'.00</span></button>'}).join('')+'</div>'+
+ '<div class="foot"><button class="pay" data-noop><span class="cc">VISA</span>Visa &bull;&bull;&bull;&bull;4242<span class="a">'+ic("chev",16,2.4)+'</span></button><div class="fr"><button class="cta" data-go="confirmed">'+(d.m==="i"?'Book '+d.n.split(' ')[0]+' '+d.n.split(' ')[1]:'Request '+d.n.split(' ')[0]+' '+d.n.split(' ')[1])+'</button><button class="sq" data-noop aria-label="Schedule">'+ic("cal",22,2)+'</button></div></div></div>'}
+
+function confirmed(){
+ var d=det(),p=price(d),dep=Math.round(p*25)/100,inst=d.m==="i";
+ return '<div class="sc"><button class="rnd" data-go="home" style="position:static;box-shadow:none;margin:6px 8px 0" aria-label="Close">'+ic("x",24,2.4)+'</button>'+
+ '<div class="h1" style="padding-top:6px">'+(inst?'Your booking is confirmed':'Your request is sent')+'</div>'+
+ '<div class="card"><div class="mapw">'+map(true)+'</div><div class="row2" style="border-top:1px solid #eee;align-items:center"><span class="ic">'+ic("clk",20)+'</span><div><b>'+d.t+'</b><span>'+(inst?'Reminder sent 24 hours before':'The detailer usually replies within 2 hours')+'</span></div></div></div>'+
+ '<div class="row2" style="margin-top:12px"><span class="ic">'+ic("pin",20)+'</span><div><b>14 Edgell Rd</b><span>Framingham, MA &middot; driveway</span></div></div>'+
+ '<div class="row2"><span class="ic">'+ic("star",20)+'</span><div><b>'+SV.filter(function(x){return x[0]===S.svc})[0][1]+' &middot; $'+p+'.00</b><span>'+d.n+'</span></div></div>'+
+ '<div class="row2"><span class="ic">'+ic("card",20)+'</span><div><b>Deposit $'+dep.toFixed(2)+(inst?' paid':' held')+'</b><span>Balance $'+(p-dep).toFixed(2)+' after the job</span></div></div>'+
+ '<div style="flex:1"></div><div class="foot" style="border:0"><div class="fr"><button class="cta" data-go="activity">View booking</button><button class="sq" data-noop aria-label="Message">'+ic("chat",22,2)+'</button></div><button class="cta w" style="width:100%;margin-top:10px" data-go="home">Cancel booking</button></div></div>'}
+
+function activity(){
+ var rows=[[DET[0],"Premium exterior","Sat Nov 7 &middot; Confirmed","$85.00",1],[DET[0],"Premium exterior","Oct 24 &middot; Completed","$85.00",0],[DET[2],"Express wash","Oct 10 &middot; Completed","$41.00",0],[DET[1],"Full detail","Sep 18 &middot; Completed","$291.00",0]];
+ return '<div class="sc"><div class="h1">Activity</div><div class="h3" style="padding-top:0">Upcoming</div>'+rows.filter(function(r){return r[4]}).map(act).join('')+'<div class="h3" style="padding-top:22px">Past</div>'+rows.filter(function(r){return !r[4]}).map(act).join('')+'<div style="flex:1"></div></div>'+tabbar("activity");
+ function act(r){return '<div class="act"><span class="th">'+van(r[0].c,48)+'</span><div class="i"><b>'+r[1]+'</b><span>'+r[0].n+'</span><span>'+r[2]+' &middot; '+r[3]+'</span></div>'+(r[4]?'<button class="rb" data-go="confirmed">View</button>':'<button class="rb" data-sel="'+r[0].id+'" data-go="choose">'+ic("clk",14,2.4)+' Rebook</button>')+'</div>'}}
+function acc(){
+ var it=function(i,t,s){return '<div class="rec" style="border-bottom:1px solid #f0f0f0"><span class="ci">'+ic(i,18)+'</span><span style="flex:1"><b>'+t+'</b>'+(s?'<span>'+s+'</span>':'')+'</span>'+ic("chev",16,2.4)+'</div>'};
+ return '<div class="sc"><div style="padding:8px 16px 16px;display:flex;gap:14px;align-items:center"><span style="width:64px;height:64px;border-radius:50%;background:#0a0a0a;color:#fff;display:grid;place-items:center;font-weight:800;font-size:1.3rem">AK</span><div><div class="h1" style="padding:0;font-size:1.6rem">Alex Kim</div><span style="color:#6b6b6b">Framingham, MA</span></div></div>'+
+ it("card","Payment","Visa 4242")+it("pin","Saved places","Home, Work")+it("user","Vehicles","2021 Subaru Outback")+it("chat","Help")+
+ '<div style="padding:20px 16px"><button class="cta w" style="width:100%" data-role="pro">Switch to Pro app</button></div><div style="flex:1"></div></div>'+tabbar("acc")}
+
+/* pro */
+function pro1(){
+ return '<div class="mapw" style="height:430px">'+map(false)+'<div class="earn">$208.25</div>'+(S.online?'':'')+
+  '<button class="bigt" data-act="online">'+(S.online?'Online':'Offline')+'<span class="sw2 '+(S.online?'on':'')+'"></span></button></div>'+
+ (S.online&&S.offer?'<div class="offer"><div class="cd"><i></i></div><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div class="big">$85.00</div><div style="color:#5e5e5e;margin-top:2px">Premium exterior &middot; about 90 min</div></div><span class="tag">'+ic("bolt",9,0,true)+' Instant</span></div>'+
+  '<div class="row2" style="padding:14px 0 6px;border:0"><span class="ic">'+ic("cal",20)+'</span><div><b>Sat Nov 7, 9:00 AM</b><span>14 Edgell Rd, Framingham &middot; 11 min away</span></div></div><div class="fr" style="margin-top:12px"><button class="sq" data-act="decline" aria-label="Decline">'+ic("x",22,2.4)+'</button><button class="cta" data-act="accept">Accept</button></div></div>':
+  '<div class="offer" style="flex:1"><div class="h3" style="padding:4px 0 6px">'+(S.online?'You are online':'You are offline')+'</div><p style="color:#5e5e5e">'+(S.online?'New requests appear here. Open times follow your calendar.':'Go online to show open times to customers.')+'</p></div>')+tabbar("pro1","pro")}
+function pro2(){
+ return '<div class="sc"><div class="h1">Jobs</div><div class="h3" style="padding-top:0">Next up</div>'+
+ '<div class="card"><div class="mapw" style="height:130px">'+map(true)+'</div><div class="row2" style="align-items:center"><span class="ic">'+ic("star",20)+'</span><div><b>Full detail &middot; Maya P.</b><span>Sat Nov 7, 9:00 AM &middot; Natick</span></div></div></div>'+
+ '<div class="stp" style="margin-top:14px"><div class="d"><i></i><span><b>Confirmed</b><span>Deposit $61.25 collected</span></span></div><div class="n"><i></i><span><b>On my way</b><span>Customer gets your arrival time</span></span></div><div class="p"><i></i><span><b>In progress</b></span></div><div class="p"><i></i><span><b>Completed</b><span>Balance charged after</span></span></div></div>'+
+ '<div style="flex:1"></div><div class="foot" style="border:0"><button class="cta" style="width:100%" data-act="enroute">I am on my way</button></div></div>'+tabbar("pro2","pro")}
+function pro3(){
+ var v=[40,70,30,0,100,66,34];
+ return '<div class="sc"><div class="h1">Earnings</div><div style="padding:0 16px 14px"><div class="big">$1,037.85</div><span style="color:#5e5e5e">Net this week &middot; next payout Tuesday</span></div><div class="bars">'+v.map(function(x,i){return '<i class="'+(i===4?'c':'')+'" style="height:'+Math.max(4,x)+'%"></i>'}).join('')+'</div>'+
+ '<div style="display:flex;justify-content:space-between;padding:6px 16px 0;color:#7d7d7d;font-size:.78rem;font-weight:700">'+["M","T","W","T","F","S","S"].map(function(d){return '<span style="flex:1;text-align:center">'+d+'</span>'}).join('')+'</div>'+
+ '<div class="sep"></div><div class="rec"><span style="flex:1"><b>Gross bookings</b></span><b>$1,221.00</b></div><div class="rec"><span style="flex:1"><b>Platform fee (15%)</b></span><b>-$183.15</b></div><div class="rec" style="border-top:1px solid #eee"><span style="flex:1"><b>Net</b></span><b>$1,037.85</b></div><div style="flex:1"></div></div>'+tabbar("pro3","pro")}
+
+var REG={customer:[["home","Home","Where is the car?"],["services","Services","All service types"],["choose","Choose a detailer","Map and price list"],["confirmed","Confirmed","Booking summary"],["activity","Activity","Rebook in one tap"],["acc","Account","Payment and places"]],
+ pro:[["pro1","Online","Job offer and accept"],["pro2","Jobs","Status steps"],["pro3","Earnings","Fee shown plainly"]]};
+var NOTES={home:["Search first.","The grey bar is the whole booking entry point. Recent addresses and four service tiles sit under it. Plans are shown as coming soon."],services:["One grid for everything.","Services, plans and the detailer app are all reachable here."],choose:["Compare on one list.","Pick a service chip and the prices update for every detailer. The selected row gets a black border, and the button names who you are booking."],confirmed:["Clear next step.","Time, address, service and the deposit split in four rows. Instant booking says confirmed, a request says sent."],activity:["Rebook is a tap.","Past jobs carry a Rebook button that opens the list with that detailer selected."],acc:["Small and familiar.","Payment, places and vehicles."],pro1:["Go online, accept a job.","The offer card has a countdown, the price first, and one black Accept button."],pro2:["One action per step.","The next status is the only button."],pro3:["Plain numbers.","Gross, 15% fee, net."]};
+
+function inner(role,screen){
+ var f={home:home,services:services,choose:choose,confirmed:confirmed,activity:activity,acc:acc,pro1:pro1,pro2:pro2,pro3:pro3};
+ var body=f[screen]();
+ var toast=S.toast&&screen===S.screen?'<div class="tst" role="status">'+S.toast+'</div>':'';
+ return '<div class="isl"></div><div class="sb"><span>9:41</span><span>5G &#9646;&#9646;&#9646;</span></div>'+body+toast+'<div class="hbar"></div>'}
+function frame(role,screen,static_){
+ return '<div class="device"><div class="phone" data-s="'+screen+'" '+(static_?'inert':'')+'>'+inner(role,screen)+'</div></div>'}
+
+function render(){
+ var prevSc=document.querySelector(".phone .sc,.phone .list"),top=prevSc?prevSc.scrollTop:0;
+ $("#roles").innerHTML=[["customer","Customer app"],["pro","Pro app"]].map(function(x){return '<button data-role="'+x[0]+'" aria-pressed="'+(S.role===x[0])+'">'+x[1]+'</button>'}).join('');
+ $("#views").innerHTML=[["phone","Interactive"],["board","All screens"]].map(function(x){return '<button data-view="'+x[0]+'" aria-pressed="'+(S.view===x[0])+'">'+x[1]+'</button>'}).join('');
+ var L=REG[S.role];
+ if(S.view==="board"){
+  $("#out").innerHTML='<div class="board">'+L.map(function(x){return '<figure><div class="bw">'+frame(S.role,x[0],true)+'</div><figcaption>'+x[1]+'</figcaption></figure>'}).join('')+'</div>';return}
+ var n=NOTES[S.screen]||NOTES.home;
+ $("#out").innerHTML='<div class="stage"><div>'+frame(S.role,S.screen,false)+'</div><div class="side"><div><h2>Screens</h2><div class="jump">'+L.map(function(x){return '<button data-go="'+x[0]+'" aria-current="'+(S.screen===x[0])+'">'+x[1]+'<small>'+x[2]+'</small></button>'}).join('')+'</div></div><div class="note"><b>'+n[0]+'</b><p>'+n[1]+'</p></div></div></div>';
+ var sc=document.querySelector(".phone .sc");if(sc&&prevSc&&prevSc.closest(".phone").dataset.s===S.screen)sc.scrollTop=top}
+var tt=0;function toast(m){S.toast=m;render();clearTimeout(tt);tt=setTimeout(function(){S.toast="";render()},2200)}
+document.addEventListener("click",function(e){
+ var t;
+ if(t=e.target.closest("[data-role]")){S.role=t.dataset.role;S.screen=REG[S.role][0][0];render();return}
+ if(t=e.target.closest("[data-view]")){S.view=t.dataset.view;render();return}
+ if(t=e.target.closest("[data-svc]")){var m={re:"prem"};S.svc=m[t.dataset.svc]||t.dataset.svc;S.screen="choose";render();return}
+ if(t=e.target.closest("[data-s]")&&e.target.closest("[data-s].sv")){S.svc=e.target.closest(".sv").dataset.s;render();return}
+ if(t=e.target.closest("[data-sel]")){S.sel=+t.dataset.sel;if(t.dataset.go)S.screen=t.dataset.go;render();return}
+ if(t=e.target.closest("[data-act]")){var a=t.dataset.act;
+  if(a==="online"){S.online=!S.online;S.offer=true;render()}
+  else if(a==="accept"){S.offer=false;toast("Accepted. Added to your jobs.")}
+  else if(a==="decline"){S.offer=false;render()}
+  else if(a==="enroute"){toast("Customer notified")}return}
+ if(t=e.target.closest("[data-go]")){S.screen=t.dataset.go;render();return}
+ if(t=e.target.closest("[data-noop]")){toast("Not part of this mockup");return}
+});
+render();
+})();
+</script>
