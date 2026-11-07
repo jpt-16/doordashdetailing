@@ -15,42 +15,70 @@ export default async function AdminPage() {
   const supabase = await createClient();
   const { data } = await supabase.from("detailers").select("*").order("created_at", { ascending: false });
   const detailers = (data ?? []) as Detailer[];
+  const pending = detailers.filter((d) => d.status === "pending").length;
 
   return (
-    <div>
-      <h1 className="mb-4 text-2xl font-bold">Detailers</h1>
-      <ul className="space-y-3">
+    <div className="mx-auto max-w-3xl">
+      <h1 className="text-[26px] font-semibold leading-tight tracking-tight">Detailers</h1>
+      <p className="mt-1 text-base text-muted">
+        {pending ? `${pending} waiting for review` : "Nothing waiting for review"} · {detailers.length} total
+      </p>
+
+      {/* Sections, not cards: hairline rows between detailers. */}
+      <ul className="mt-6 divide-y divide-line border-y border-line">
         {detailers.map((d) => (
-          <li key={d.id} className="rounded-xl bg-white p-4 ring-1 ring-slate-200">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <p className="font-semibold">{d.business_name || "(no name)"}</p>
-                <p className="text-sm text-slate-500">/{d.slug}</p>
+          <li key={d.id} className="py-5">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="truncate text-base font-semibold">{d.business_name || "(no name)"}</p>
+                <p className="text-sm text-muted">
+                  /{d.slug}
+                  {d.town ? ` · ${d.town}` : ""}
+                </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-1.5">
                 <Badge tone={tone[d.status]}>{d.status}</Badge>
-                {d.verified && <Badge>Verified</Badge>}
+                {d.verified && <Badge tone="neutral">Verified</Badge>}
               </div>
             </div>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {d.status !== "approved" && <Action id={d.id} name="status" value="approved" label="Approve" />}
+            <div className="mt-4 flex flex-wrap gap-2">
+              {d.status !== "approved" && <Action id={d.id} name="status" value="approved" label="Approve" primary />}
               {d.status !== "rejected" && <Action id={d.id} name="status" value="rejected" label="Reject" danger />}
               <Action id={d.id} name="verified" value={String(!d.verified)} label={d.verified ? "Remove verified" : "Mark verified"} />
             </div>
           </li>
         ))}
-        {detailers.length === 0 && <p className="text-slate-500">No detailers yet.</p>}
       </ul>
+      {detailers.length === 0 && (
+        <div className="py-16 text-center">
+          <h2 className="text-[22px] font-semibold tracking-tight">No detailers yet</h2>
+          <p className="mt-2 text-base text-muted">New applications appear here for review.</p>
+        </div>
+      )}
     </div>
   );
 }
 
-function Action({ id, name, value, label, danger }: { id: string; name: string; value: string; label: string; danger?: boolean }) {
+function Action({
+  id,
+  name,
+  value,
+  label,
+  danger,
+  primary,
+}: {
+  id: string;
+  name: string;
+  value: string;
+  label: string;
+  danger?: boolean;
+  primary?: boolean;
+}) {
   return (
     <form action={updateDetailer}>
       <input type="hidden" name="id" value={id} />
       <input type="hidden" name={name} value={value} />
-      <Button type="submit" variant={danger ? "danger" : "secondary"} className="min-h-9">
+      <Button type="submit" variant={danger ? "danger" : primary ? "dark" : "outline"} className="min-h-10">
         {label}
       </Button>
     </form>

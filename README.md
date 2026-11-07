@@ -6,7 +6,8 @@ Stack: Next.js (App Router) + TypeScript + Tailwind, Supabase (Postgres, Auth, R
 
 ## Build status
 
-- [x] Step 2: auth and roles (this commit)
+- [x] Step 2: auth and roles
+- [x] UI refresh (from HANDOFF.md): tokens, header, stepped search, results, detailer profile, request-to-book screen, auth, dashboards. Services, photos, reviews and bookings are placeholders in `src/lib/sample-data.ts` until their tables exist.
 - [ ] Steps 3–9: profile onboarding, public page, booking, browse, job lifecycle, reviews, dashboards, seed data
 
 ## Product decisions (from the concept doc)

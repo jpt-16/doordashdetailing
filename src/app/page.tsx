@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { brand } from "@config/brand";
-import { getCurrentProfile, homeFor } from "@/lib/auth";
+import { getCurrentProfile } from "@/lib/auth";
 import { SearchFlow } from "@/components/home/search-flow";
 import { buttonClass } from "@/components/ui/button";
 
@@ -24,7 +24,6 @@ const steps = [
 
 export default async function Home() {
   const profile = await getCurrentProfile();
-  const searchHref = profile ? homeFor(profile.role) : "/signup";
   return (
     <div className="-mx-6">
       <section className="px-6 pb-12 pt-8 sm:pt-14">
@@ -36,7 +35,7 @@ export default async function Home() {
           <SearchFlow
             defaultWhere={profile?.saved_address ?? ""}
             defaultVehicle={profile?.saved_vehicle_size ?? null}
-            searchHref={searchHref}
+            searchHref="/detailers"
           />
         </div>
       </section>
