@@ -64,7 +64,6 @@ export interface Listing {
   jobs: number;
   factor: number; // price multiplier vs the base menu
   instant: boolean;
-  photos: number;
   services: Service[];
   replyHours: number;
 }
@@ -73,10 +72,6 @@ function hash(s: string) {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
   return h;
-}
-
-export function hueFor(slug: string) {
-  return hash(slug) % 360;
 }
 
 export function listingFor(slug: string): Listing {
@@ -91,7 +86,6 @@ export function listingFor(slug: string): Listing {
     jobs: 20 + (h % 180),
     factor: [0.9, 1, 1.1, 1.2][h % 4],
     instant: h % 2 === 0,
-    photos: 4 + (h % 3),
     services,
     replyHours: 1 + (h % 3),
   };

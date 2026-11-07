@@ -43,7 +43,7 @@ export default async function DetailerProfile({ params, searchParams }: Props) {
         </Link>
       </div>
 
-      <PhotoCarousel slug={d.slug} count={l.photos} pill className="aspect-[4/3] sm:rounded-card md:aspect-[16/7]" />
+      <PhotoCarousel name={d.business_name} pill className="aspect-[4/3] sm:rounded-card md:aspect-[16/7]" />
 
       <div className="px-6 sm:px-0">
         <div className="pt-6">
@@ -96,7 +96,7 @@ export default async function DetailerProfile({ params, searchParams }: Props) {
           <div id="reviews" />
           <ReviewsBlock reviews={l.reviews} business={d.business_name} />
         </Section>
-        <p className="pb-4 text-xs text-muted">Photos, services and reviews are placeholders until detailers can add their own.</p>
+        <p className="pb-4 text-xs text-muted">Services and reviews are placeholders, and photos appear once detailers upload their own.</p>
       </div>
 
       <StickyFooter>

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet } from "@/components/ui/sheet";
 import { Band, Hairline, LabelRow } from "@/components/ui/section";
 import { Icon, Stars } from "@/components/ui/icons";
-import { ListingArt } from "@/components/detailers/listing-art";
+import { PhotoPlaceholder } from "@/components/detailers/photo-placeholder";
 import { servicePrice, type Service, type VehicleSize } from "@/lib/sample-data";
 
 type Row = "service" | "date" | "window" | "vehicle" | "address";
@@ -100,7 +100,7 @@ export function BookingForm({
     <div className="-mx-6 sm:mx-0">
       <div className="flex gap-4 px-6 pb-6 sm:px-0">
         <div className="h-24 w-28 flex-none overflow-hidden rounded-btn">
-          <ListingArt slug={slug} />
+          <PhotoPlaceholder name={name} />
         </div>
         <div className="min-w-0">
           <p className="text-xs text-muted">Mobile detailer</p>

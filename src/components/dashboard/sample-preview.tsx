@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ListingArt } from "@/components/detailers/listing-art";
+import { PhotoPlaceholder } from "@/components/detailers/photo-placeholder";
 import { Band, Hairline, IconRow, LabelRow, Section } from "@/components/ui/section";
 import { Icon } from "@/components/ui/icons";
 
@@ -11,7 +11,7 @@ export function CustomerTripPreview() {
         <p className="mb-3 inline-block rounded-btn bg-band px-3 py-1.5 text-xs text-muted">Sample booking, for layout review</p>
         <h1 className="text-[26px] font-semibold leading-tight tracking-tight">Your detail with Bay State Mobile Detail</h1>
         <div className="mt-5 aspect-[16/10] overflow-hidden rounded-card">
-          <ListingArt slug="bay-state-mobile-detail" />
+          <PhotoPlaceholder name="Bay State Mobile Detail" />
         </div>
         <div className="mt-5 grid grid-cols-2 pb-5">
           <div className="pr-4">

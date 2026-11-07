@@ -20,7 +20,7 @@ export function DetailerCard({
   return (
     <li className="rise-in" style={{ ["--i" as string]: index }}>
       <Link href={`/d/${detailer.slug}${query ? `?${query}` : ""}`} className="press group block transition-transform duration-150 ease-out active:scale-[0.99]">
-        <PhotoCarousel slug={detailer.slug} count={l.photos} dots className="aspect-[4/3] rounded-card" />
+        <PhotoCarousel name={detailer.business_name} dots className="aspect-[4/3] rounded-card" />
         <div className="mt-3 flex items-start justify-between gap-3">
           <p className="min-w-0 truncate text-base font-semibold">{detailer.business_name}</p>
           <p className="flex flex-none items-center gap-1 text-sm">
